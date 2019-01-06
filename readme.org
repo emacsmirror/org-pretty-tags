@@ -20,6 +20,19 @@ wider range of tags could be nice.
 
 Note that the actual tag is not changed by the mode, it's just decoration.
 
+*** Example :ATTACH:
+:PROPERTIES:
+:ID:       a0a7f0d8-cdc8-414b-a715-e48205d07deb
+:END:
+
+**** Ordinary tag display
+
+[[data/a0/a7f0d8-cdc8-414b-a715-e48205d07deb/emacsshot.win-20190106143046.png][ordinary tag display]]
+
+**** Pretty tag display
+
+[[data/a0/a7f0d8-cdc8-414b-a715-e48205d07deb/emacsshot.win-20190106143055.png][pretty tag display]]
+
 ** Use
 
 *** Definition
