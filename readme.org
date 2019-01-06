@@ -1,0 +1,309 @@
+#+title: Surrogates for tags
+
+* About
+:PROPERTIES:
+:EXPORT_FILE_NAME: doc-org-pretty-tags
+:END:
+
+This is a minor mode to display text or image surrogates for org mode
+tags.
+
+** Why
+
+In Org mode only a small set of characters is allowed in tags.  A
+wider range of tags could be nice.
+
+** What the mode offers
+
+- A way to define surrogate strings and surrogate images for certain tags.
+- Overlay the tags with the surrogates.
+
+Note that the actual tag is not changed by the mode, it's just decoration.
+
+** Use
+
+*** Definition
+
+Use =M-x customize-variable org-pretty-tags-alternative-strings= to
+define surrogate strings for tags.  E.g. add the pair "money", "$$$".
+
+Use =M-x customize-variable org-pretty-tags-alternative-images= to
+define surrogate images for tags.  The definition of the image is
+expected to be a path to an image.  E.g. add the pair "org", "<path to
+org icon>".
+
+*** Activate
+
+- Activate the mode with =M-x org-pretty-tags-mode=.
+
+- Deactivate the mode with a further =M-x org-pretty-tags-mode=.
+
+** License
+
+Copyright 2019 Marco Wahl
+
+- Author: Marco Wahl <marcowahlsoft@gmail.com>
+- Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
+- Created: [2019-01-06]
+- Version: 0.0.0
+- Keywords: reading, outliner
+
+This file is not part of Emacs.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+* Code
+:PROPERTIES:
+:header-args:emacs-lisp: :tangle org-pretty-tags.el
+:END:
+
+** First Lines
+:PROPERTIES:
+:ID:       15f7cf10-3b11-4373-b2e7-8b89f1dbafbc
+:END:
+
+#+begin_src emacs-lisp
+;;; org-pretty-tags.el --- Surrogates for tags  -*- lexical-binding: t -*-
+
+;; THIS FILE HAS BEEN GENERATED.  see the literate source.
+
+;; Copyright 2019 Marco Wahl
+;;
+;; Author: Marco Wahl <marcowahlsoft@gmail.com>
+;; Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
+;; Created: [2019-01-06]
+;; Version: 0.0.0
+;; Keywords: reading, outliner
+;;
+;; This file is not part of Emacs.
+;;
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+;;; Commentary:
+
+;; See the literate source file.
+
+
+;;; Code:
+#+end_src
+
+** Functionality
+:PROPERTIES:
+:header-args:emacs-lisp+: :comments both
+:ID:       3b8dcfaf-b4df-4683-b5df-9a1a54208b3c
+:END:
+
+*** container for the overlays
+:PROPERTIES:
+:ID:       cf2048b2-5f4e-4211-873d-9bce13c53f59
+:END:
+
+#+begin_src emacs-lisp
+(defvar-local org-pretty-tags-overlays nil
+ "Container for the overlays of org-pretty-tags-mode.")
+#+end_src
+
+*** list of tags with symbols surrogates for plain ascii tags
+:PROPERTIES:
+:ID:       16c25206-73c2-422b-8948-979c415b75de
+:END:
+
+#+begin_src emacs-lisp
+(defcustom org-pretty-tags-surrogate-strings
+  '(("imp" . "☆") ; important stuff.
+    ("idea" . "💡") ; inspiration.
+    ("money" . "$$$")
+    ("easy" . "₰")
+    ("music" . "♩"))
+  "List of pretty replacements for tags."
+  :type '(alist :key-type string :value-type string)
+  :group 'org-tags)
+#+end_src
+
+*** list of image surrogates for plain ascii tags
+:PROPERTIES:
+:ID:       cabb8307-a825-485d-9bf4-371d4020ef5b
+:END:
+
+#+begin_src emacs-lisp
+(defcustom org-pretty-tags-surrogate-images
+  '()
+  "List of pretty image replacements for tags."
+  :type '(alist :key-type string :value-type string)
+  :group 'org-tags)
+#+end_src
+
+*** function to update the tag surrogates
+:PROPERTIES:
+:ID:       da436b9c-2eb6-4247-804c-20e18a626ac7
+:END:
+
+#+begin_src emacs-lisp
+(defun org-pretty-tags-refresh-overlays ()
+  "Beautify tags using overlays in current buffer."
+  (let ((ro buffer-read-only))
+    (when ro (setq buffer-read-only nil))
+    (let ((tags-to-alternative-images
+           (mapcar
+            (lambda (x)
+              (cons (car x)
+                    (let* ((px-subtract-from-image-height 5)
+                           (img
+                            (create-image
+                             (cdr x)
+                             nil nil
+                             :height (- (window-font-height) px-subtract-from-image-height)
+                             :ascent 'center)))
+                      (plist-put (cdr img) :type 'imagemagick)
+                      img)))
+            org-pretty-tags-surrogate-images)))
+      (while org-pretty-tags-overlays
+        (delete-overlay (pop org-pretty-tags-overlays)))
+      (mapc (lambda (x)
+              (org-with-point-at 1
+                                        ; try: make sure only tags are changed.
+                                        ; try: use org functionality to loop over the headings.
+                (while (re-search-forward
+                        (concat ":\\(" (car x) "\\):") nil t)
+                  (when (or (derived-mode-p 'org-agenda-mode)
+                            (save-match-data (org-at-heading-p)))
+                    (push (make-overlay (match-beginning 1) (match-end 1))
+                          org-pretty-tags-overlays)
+                    (overlay-put (car org-pretty-tags-overlays) 'display (cdr x))))))
+            (append org-pretty-tags-surrogate-strings tags-to-alternative-images))
+      (when ro (setq buffer-read-only ro)))))
+#+end_src
+
+*** define the mode
+:PROPERTIES:
+:ID:       a3d9cc59-89aa-4165-a844-90da8531b46f
+:END:
+
+#+begin_src emacs-lisp
+(define-minor-mode org-pretty-tags-mode
+  "Display surrogates for tags."
+  :lighter " pretty tags"
+  (cond
+   (org-pretty-tags-mode
+    (unless (derived-mode-p 'org-mode 'org-agenda-mode)
+      (user-error "Attempt to activate pretty tags mode on non Org mode buffer.  Doing nothing.  Try with Org mode buffer."))
+    (org-pretty-tags-refresh-overlays)
+    (add-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays)
+    (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
+    (add-hook 'org-ctrl-c-ctrl-c-final-hook
+              (lambda ()
+                (org-pretty-tags-refresh-overlays)
+                nil))
+    (add-hook 'org-mode-hook #'org-pretty-tags-refresh-overlays)
+    (message "pretty tags overlays installed"))
+   (t
+    (while org-pretty-tags-overlays
+      (delete-overlay (pop org-pretty-tags-overlays)))
+    (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays)
+    (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
+    (remove-hook 'org-ctrl-c-ctrl-c-final-hook
+                 '(closure
+                   (t)
+                   nil
+                   (org-pretty-tags-refresh-overlays)
+                   nil))
+    (remove-hook 'org-mode-hook #'org-pretty-tags-refresh-overlays)
+    (message "pretty tags overlays removed"))))
+#+end_src
+
+** Last Lines
+:PROPERTIES:
+:ID:       300d188f-9b90-4bd8-9d65-78823402a3de
+:END:
+
+#+begin_src emacs-lisp
+
+(provide 'org-pretty-tags)
+
+;;; org-pretty-tags.el ends here
+#+end_src
+
+
+* Testing
+
+** Run Unittests
+
+ - Evaluate the following source block to tangle the necessary and run
+   the unittests e.g. by following the link [[elisp:(progn
+   (org-babel-next-src-block) (org-babel-execute-src-block))]].
+
+#+begin_src emacs-lisp :results silent
+(let ((apath "."))
+  (org-babel-tangle-file "org-pretty-tags.org")
+  (ert-delete-all-tests)
+  (push apath load-path)
+  (load "org-pretty-tags.el")
+  (load "test/org-pretty-tags-test.el")
+  (ert t)
+  (setq load-path (remove apath load-path))
+  (run-with-timer 1 nil (lambda () (switch-to-buffer-other-window "*ert*"))))
+#+end_src
+
+** Unittests
+:PROPERTIES:
+:header-args:emacs-lisp: :tangle test/org-pretty-tags-test.el
+:END:
+
+*** First line
+:PROPERTIES:
+:ID:       0afc357c-dbc7-447b-8123-8b725e9c6e7d
+:END:
+
+#+begin_src emacs-lisp :padline no
+;;; org-pretty-tags-test.el --- tests  -*- lexical-binding: t -*-
+#+end_src
+
+*** Tests
+:PROPERTIES:
+:header-args:emacs-lisp+: :comments both
+:ID:       dac141b6-e0a8-4312-8022-90b08fce4c84
+:END:
+
+#+begin_src emacs-lisp
+(require 'org-pretty-tags)
+#+end_src
+
+#+begin_src emacs-lisp
+(ert-deftest test-1 ()
+  (should (and "some reasonable test wanted here." nil)))
+#+end_src
+
+*** Last Lines
+:PROPERTIES:
+:ID:       b4d9edb9-2c12-4110-a47d-361ce458f129
+:END:
+
+#+begin_src emacs-lisp
+
+(provide 'org-pretty-tags-test)
+
+;;; org-pretty-tags-test.el ends here
+#+end_src
