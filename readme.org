@@ -27,11 +27,11 @@ Note that the actual tag is not changed by the mode, it's just decoration.
 
 **** Ordinary tag display
 
-[[data/a0/a7f0d8-cdc8-414b-a715-e48205d07deb/emacsshot.win-20190106143046.png][ordinary tag display]]
+[[data/a0/a7f0d8-cdc8-414b-a715-e48205d07deb/emacsshot.win-20190106143046.png]]
 
 **** Pretty tag display
 
-[[data/a0/a7f0d8-cdc8-414b-a715-e48205d07deb/emacsshot.win-20190106143055.png][pretty tag display]]
+[[data/a0/a7f0d8-cdc8-414b-a715-e48205d07deb/emacsshot.win-20190106143055.png]]
 
 ** Use
 
