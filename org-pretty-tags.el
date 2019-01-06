@@ -51,6 +51,7 @@
 
 
 ;; [[id:16c25206-73c2-422b-8948-979c415b75de][list of tags with symbols surrogates for plain ascii tags:1]]
+;;;###autoload
 (defcustom org-pretty-tags-surrogate-strings
   '(("imp" . "☆") ; important stuff.
     ("idea" . "💡") ; inspiration.
@@ -69,6 +70,7 @@
 
 
 ;; [[id:cabb8307-a825-485d-9bf4-371d4020ef5b][list of image surrogates for plain ascii tags:1]]
+;;;###autoload
 (defcustom org-pretty-tags-surrogate-images
   '()
   "List of pretty image replacements for tags."
@@ -84,7 +86,7 @@
 
 ;; [[id:da436b9c-2eb6-4247-804c-20e18a626ac7][function to update the tag surrogates:1]]
 (defun org-pretty-tags-refresh-overlays ()
-  "Beautify tags using overlays in current buffer."
+  "Overlay tags in current buffer."
   (let ((ro buffer-read-only))
     (when ro (setq buffer-read-only nil))
     (let ((tags-to-alternative-images
@@ -125,6 +127,7 @@
 
 
 ;; [[id:a3d9cc59-89aa-4165-a844-90da8531b46f][define the mode:1]]
+;;;###autoload
 (define-minor-mode org-pretty-tags-mode
   "Display surrogates for tags."
   :lighter " pretty tags"

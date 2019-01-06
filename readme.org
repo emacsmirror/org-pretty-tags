@@ -132,6 +132,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 :END:
 
 #+begin_src emacs-lisp
+;;;###autoload
 (defcustom org-pretty-tags-surrogate-strings
   '(("imp" . "☆") ; important stuff.
     ("idea" . "💡") ; inspiration.
@@ -149,6 +150,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 :END:
 
 #+begin_src emacs-lisp
+;;;###autoload
 (defcustom org-pretty-tags-surrogate-images
   '()
   "List of pretty image replacements for tags."
@@ -163,7 +165,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #+begin_src emacs-lisp
 (defun org-pretty-tags-refresh-overlays ()
-  "Beautify tags using overlays in current buffer."
+  "Overlay tags in current buffer."
   (let ((ro buffer-read-only))
     (when ro (setq buffer-read-only nil))
     (let ((tags-to-alternative-images
@@ -203,6 +205,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 :END:
 
 #+begin_src emacs-lisp
+;;;###autoload
 (define-minor-mode org-pretty-tags-mode
   "Display surrogates for tags."
   :lighter " pretty tags"
