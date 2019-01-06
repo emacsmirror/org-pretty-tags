@@ -51,6 +51,15 @@ org icon>".
 
 - Deactivate the mode with a further =M-x org-pretty-tags-mode=.
 
+** Install
+
+Install by adding the respective lines to your init.e (as usual):
+
+#+begin_src emacs-lisp :tangle no
+(push "<path/to/org-pretty-tags>" load-path)
+(require 'org-pretty-tags)
+#+end_src
+
 ** License
 
 Copyright 2019 Marco Wahl
