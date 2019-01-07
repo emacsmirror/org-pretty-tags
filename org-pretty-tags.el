@@ -142,7 +142,6 @@
               (lambda ()
                 (org-pretty-tags-refresh-overlays)
                 nil))
-    (add-hook 'org-mode-hook #'org-pretty-tags-refresh-overlays)
     (message "pretty tags overlays installed"))
    (t
     (while org-pretty-tags-overlays
@@ -155,7 +154,6 @@
                    nil
                    (org-pretty-tags-refresh-overlays)
                    nil))
-    (remove-hook 'org-mode-hook #'org-pretty-tags-refresh-overlays)
     (message "pretty tags overlays removed"))))
 ;; define the mode:1 ends here
 
