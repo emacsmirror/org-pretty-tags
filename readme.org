@@ -86,42 +86,23 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 * Code
+
+** Functionality
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle org-pretty-tags.el
 :END:
 
-** First Lines
+*** First Lines
 :PROPERTIES:
 :ID:       15f7cf10-3b11-4373-b2e7-8b89f1dbafbc
 :END:
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :noweb yes
 ;;; org-pretty-tags.el --- Surrogates for tags  -*- lexical-binding: t -*-
 
 ;; THIS FILE HAS BEEN GENERATED.  see the literate source.
 
-;; Copyright 2019 Marco Wahl
-;;
-;; Author: Marco Wahl <marcowahlsoft@gmail.com>
-;; Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
-;; Created: [2019-01-06]
-;; Version: 0.0.0
-;; Keywords: reading, outliner
-;;
-;; This file is not part of Emacs.
-;;
-;; This program is free software: you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation, either version 3 of the License, or
-;; (at your option) any later version.
-;;
-;; This program is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
-;;
-;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;; <<copyright>>
 
 
 ;;; Commentary:
@@ -132,13 +113,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;;; Code:
 #+end_src
 
-** Functionality
+*** Functionality
 :PROPERTIES:
 :header-args:emacs-lisp+: :comments both
 :ID:       3b8dcfaf-b4df-4683-b5df-9a1a54208b3c
 :END:
 
-*** container for the overlays
+**** container for the overlays
 :PROPERTIES:
 :ID:       cf2048b2-5f4e-4211-873d-9bce13c53f59
 :END:
@@ -148,7 +129,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  "Container for the overlays of org-pretty-tags-mode.")
 #+end_src
 
-*** list of tags with symbols surrogates for plain ascii tags
+**** list of tags with symbols surrogates for plain ascii tags
 :PROPERTIES:
 :ID:       16c25206-73c2-422b-8948-979c415b75de
 :END:
@@ -166,7 +147,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   :group 'org-tags)
 #+end_src
 
-*** list of image surrogates for plain ascii tags
+**** list of image surrogates for plain ascii tags
 :PROPERTIES:
 :ID:       cabb8307-a825-485d-9bf4-371d4020ef5b
 :END:
@@ -180,7 +161,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   :group 'org-tags)
 #+end_src
 
-*** function to update the tag surrogates
+**** function to update the tag surrogates
 :PROPERTIES:
 :ID:       da436b9c-2eb6-4247-804c-20e18a626ac7
 :END:
@@ -221,7 +202,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       (when ro (setq buffer-read-only ro)))))
 #+end_src
 
-*** define the mode
+**** define the mode
 :PROPERTIES:
 :ID:       a3d9cc59-89aa-4165-a844-90da8531b46f
 :END:
@@ -257,7 +238,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     (message "pretty tags overlays removed"))))
 #+end_src
 
-** Last Lines
+*** Last Lines
 :PROPERTIES:
 :ID:       300d188f-9b90-4bd8-9d65-78823402a3de
 :END:
@@ -270,9 +251,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #+end_src
 
 
-* Testing
+** Testing
 
-** Run Unittests
+*** Run Unittests
 
  - Evaluate the following source block to tangle the necessary and run
    the unittests e.g. by following the link [[elisp:(progn
@@ -290,21 +271,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   (run-with-timer 1 nil (lambda () (switch-to-buffer-other-window "*ert*"))))
 #+end_src
 
-** Unittests
+*** Unittests
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle test-org-pretty-tags.el
 :END:
 
-*** First line
+**** First lines
 :PROPERTIES:
 :ID:       0afc357c-dbc7-447b-8123-8b725e9c6e7d
 :END:
 
-#+begin_src emacs-lisp :padline no
+#+begin_src emacs-lisp :padline no :noweb yes
 ;;; test-org-pretty-tags.el --- tests  -*- lexical-binding: t -*-
+
+
+;; THIS FILE HAS BEEN GENERATED.  see the literate source.
+
+;; <<copyright>>
+
+
 #+end_src
 
-*** Tests
+**** Tests
 :PROPERTIES:
 :header-args:emacs-lisp+: :comments both
 :ID:       dac141b6-e0a8-4312-8022-90b08fce4c84
@@ -328,7 +316,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       (should (get-char-property 8 'display)))))
 #+end_src
 
-*** Last Lines
+**** Last Lines
 :PROPERTIES:
 :ID:       b4d9edb9-2c12-4110-a47d-361ce458f129
 :END:
@@ -338,4 +326,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 (provide 'test-org-pretty-tags)
 
 ;;; test-org-pretty-tags.el ends here
+#+end_src
+
+** Other
+
+*** Copyright
+
+#+name: copyright
+#+begin_src text
+Copyright 2019 Marco Wahl
+
+Author: Marco Wahl <marcowahlsoft@gmail.com>
+Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
+Created: [2019-01-06]
+Version: 0.0.0
+Keywords: reading, outliner
+
+This file is not part of Emacs.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #+end_src
