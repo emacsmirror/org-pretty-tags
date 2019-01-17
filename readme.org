@@ -284,7 +284,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   (ert-delete-all-tests)
   (push apath load-path)
   (load "org-pretty-tags.el")
-  (load "test/org-pretty-tags-test.el")
+  (load "test-org-pretty-tags.el")
   (ert t)
   (setq load-path (remove apath load-path))
   (run-with-timer 1 nil (lambda () (switch-to-buffer-other-window "*ert*"))))
@@ -292,7 +292,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ** Unittests
 :PROPERTIES:
-:header-args:emacs-lisp: :tangle test/org-pretty-tags-test.el
+:header-args:emacs-lisp: :tangle test-org-pretty-tags.el
 :END:
 
 *** First line
@@ -301,7 +301,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 :END:
 
 #+begin_src emacs-lisp :padline no
-;;; org-pretty-tags-test.el --- tests  -*- lexical-binding: t -*-
+;;; test-org-pretty-tags.el --- tests  -*- lexical-binding: t -*-
 #+end_src
 
 *** Tests
@@ -335,7 +335,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #+begin_src emacs-lisp
 
-(provide 'org-pretty-tags-test)
+(provide 'test-org-pretty-tags)
 
-;;; org-pretty-tags-test.el ends here
+;;; test-org-pretty-tags.el ends here
 #+end_src
