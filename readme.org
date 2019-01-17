@@ -315,8 +315,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #+end_src
 
 #+begin_src emacs-lisp
-(ert-deftest test-1 ()
-  (should (and "some reasonable test wanted here." nil)))
+(ert-deftest test-org-pretty-tags-1 ()
+  "a glyph overlays a tag."
+  (with-temp-buffer
+    (insert "* foo :bar:
+")
+    (org-mode)
+    (let ((org-pretty-tags-surrogate-strings
+           '(("bar" . "&"))))
+      (org-pretty-tags-mode)
+      (buffer-substring 8 9)
+      (should (get-char-property 8 'display)))))
 #+end_src
 
 *** Last Lines
