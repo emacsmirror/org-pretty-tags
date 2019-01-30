@@ -90,11 +90,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #+end_src
 
-** tasks
+** Tasks
 
-*** TODO make sure only tags get the surrogate
+*** TODO Make sure only tags get the surrogate
 
-**** a match before the tag area gets replaced by the surrogate. :observation:
+- A match before the tag area gets replaced by the surrogate.
 
 * Code
 
