@@ -78,6 +78,45 @@
   :group 'org-tags)
 ;; list of image surrogates for plain ascii tags:1 ends here
 
+;; cache for the images
+;; :PROPERTIES:
+;; :ID:       fb26c0bc-a69e-4cd2-8b5a-800682d24706
+;; :foo:      foo
+;; :END:
+
+
+;; [[id:fb26c0bc-a69e-4cd2-8b5a-800682d24706][cache for the images:1]]
+(defvar org-pretty-tags-image-cache
+  (org-pretty-tags-image-cache)
+  "Cache for the image surrogates.")
+;; cache for the images:1 ends here
+
+;; [[id:fb26c0bc-a69e-4cd2-8b5a-800682d24706][cache for the images:2]]
+(defun org-pretty-tags-image-cache ()
+  "Return a map from tag to image.
+Input is `org-pretty-tags-surrogate-images'."
+  (mapcar
+   (lambda (x)
+     (cons (car x)
+           (let* ((px-subtract-from-image-height 5)
+                  (img
+                   (create-image
+                    (cdr x)
+                    nil nil
+                    :height (- (window-font-height) px-subtract-from-image-height)
+                    :ascent 'center)))
+             (plist-put (cdr img) :type 'imagemagick)
+             img)))
+   org-pretty-tags-surrogate-images))
+;; cache for the images:2 ends here
+
+;; [[id:fb26c0bc-a69e-4cd2-8b5a-800682d24706][cache for the images:3]]
+(defun org-pretty-tags-update-image-cache ()
+  "Update `org-pretty-tags-image-cache' from list `org-pretty-tags-surrogate-images'."
+  (interactive)
+  (setq org-pretty-tags-image-cache (org-pretty-tags-image-cache)))
+;; cache for the images:3 ends here
+
 ;; function to update the tag surrogates
 ;; :PROPERTIES:
 ;; :ID:       da436b9c-2eb6-4247-804c-20e18a626ac7
@@ -85,39 +124,26 @@
 
 
 ;; [[id:da436b9c-2eb6-4247-804c-20e18a626ac7][function to update the tag surrogates:1]]
+(defun org-pretty-tags-delete-overlays ()
+  (while org-pretty-tags-overlays
+    (delete-overlay (pop org-pretty-tags-overlays))))
+
 (defun org-pretty-tags-refresh-overlays ()
   "Overlay tags in current buffer."
-  (let ((ro buffer-read-only))
-    (when ro (setq buffer-read-only nil))
-    (let ((tags-to-alternative-images
-           (mapcar
-            (lambda (x)
-              (cons (car x)
-                    (let* ((px-subtract-from-image-height 5)
-                           (img
-                            (create-image
-                             (cdr x)
-                             nil nil
-                             :height (- (window-font-height) px-subtract-from-image-height)
-                             :ascent 'center)))
-                      (plist-put (cdr img) :type 'imagemagick)
-                      img)))
-            org-pretty-tags-surrogate-images)))
-      (while org-pretty-tags-overlays
-        (delete-overlay (pop org-pretty-tags-overlays)))
-      (mapc (lambda (x)
-              (org-with-point-at 1
+  (let ((inhibit-read-only t))
+    (org-pretty-tags-delete-overlays)
+    (mapc (lambda (x)
+            (org-with-point-at 1
                                         ; try: make sure only tags are changed.
                                         ; try: use org functionality to loop over the headings.
-                (while (re-search-forward
-                        (concat ":\\(" (car x) "\\):") nil t)
-                  (when (or (derived-mode-p 'org-agenda-mode)
-                            (save-match-data (org-at-heading-p)))
-                    (push (make-overlay (match-beginning 1) (match-end 1))
-                          org-pretty-tags-overlays)
-                    (overlay-put (car org-pretty-tags-overlays) 'display (cdr x))))))
-            (append org-pretty-tags-surrogate-strings tags-to-alternative-images))
-      (when ro (setq buffer-read-only ro)))))
+              (while (re-search-forward
+                      (concat ":\\(" (car x) "\\):") nil t)
+                (when (or (derived-mode-p 'org-agenda-mode)
+                          (save-match-data (org-at-heading-p)))
+                  (push (make-overlay (match-beginning 1) (match-end 1))
+                        org-pretty-tags-overlays)
+                  (overlay-put (car org-pretty-tags-overlays) 'display (cdr x))))))
+          (append org-pretty-tags-surrogate-strings org-pretty-tags-image-cache))))
 ;; function to update the tag surrogates:1 ends here
 
 ;; define the mode
@@ -136,24 +162,13 @@
     (unless (derived-mode-p 'org-mode 'org-agenda-mode)
       (user-error "Attempt to activate pretty tags mode on non Org mode buffer.  Doing nothing.  Try with Org mode buffer."))
     (org-pretty-tags-refresh-overlays)
-    (add-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays)
     (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
-    (add-hook 'org-ctrl-c-ctrl-c-final-hook
-              (lambda ()
-                (org-pretty-tags-refresh-overlays)
-                nil))
+    (add-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays)
     (message "pretty tags overlays installed"))
    (t
-    (while org-pretty-tags-overlays
-      (delete-overlay (pop org-pretty-tags-overlays)))
-    (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays)
+    (org-pretty-tags-delete-overlays)
     (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
-    (remove-hook 'org-ctrl-c-ctrl-c-final-hook
-                 '(closure
-                   (t)
-                   nil
-                   (org-pretty-tags-refresh-overlays)
-                   nil))
+    (remove-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays)
     (message "pretty tags overlays removed"))))
 ;; define the mode:1 ends here
 
