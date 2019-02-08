@@ -180,8 +180,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #+begin_src emacs-lisp
 (defun org-pretty-tags-refresh-overlays ()
   "Overlay tags in current buffer."
-  (let ((ro buffer-read-only))
-    (when ro (setq buffer-read-only nil))
+  (let ((inhibit-read-only t))
     (let ((tags-to-alternative-images
            (mapcar
             (lambda (x)
@@ -209,8 +208,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     (push (make-overlay (match-beginning 1) (match-end 1))
                           org-pretty-tags-overlays)
                     (overlay-put (car org-pretty-tags-overlays) 'display (cdr x))))))
-            (append org-pretty-tags-surrogate-strings tags-to-alternative-images))
-      (when ro (setq buffer-read-only ro)))))
+            (append org-pretty-tags-surrogate-strings tags-to-alternative-images)))))
 #+end_src
 
 **** define the mode
