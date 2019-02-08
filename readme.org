@@ -253,24 +253,13 @@ Input is `org-pretty-tags-surrogate-images'."
     (unless (derived-mode-p 'org-mode 'org-agenda-mode)
       (user-error "Attempt to activate pretty tags mode on non Org mode buffer.  Doing nothing.  Try with Org mode buffer."))
     (org-pretty-tags-refresh-overlays)
-    (add-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays)
     (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
-    (add-hook 'org-ctrl-c-ctrl-c-final-hook
-              (lambda ()
-                (org-pretty-tags-refresh-overlays)
-                nil))
+    (add-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays)
     (message "pretty tags overlays installed"))
    (t
-    (while org-pretty-tags-overlays
-      (delete-overlay (pop org-pretty-tags-overlays)))
-    (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays)
+    (org-pretty-tags-delete-overlays)
     (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
-    (remove-hook 'org-ctrl-c-ctrl-c-final-hook
-                 '(closure
-                   (t)
-                   nil
-                   (org-pretty-tags-refresh-overlays)
-                   nil))
+    (remove-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays)
     (message "pretty tags overlays removed"))))
 #+end_src
 
