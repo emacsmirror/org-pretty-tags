@@ -179,12 +179,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 :END:
 
 #+begin_src emacs-lisp
-(defvar org-pretty-tags-image-cache
-  (org-pretty-tags-image-cache)
-  "Cache for the image surrogates.")
-#+end_src
-
-#+begin_src emacs-lisp
 (defun org-pretty-tags-image-cache ()
   "Return a map from tag to image.
 Input is `org-pretty-tags-surrogate-images'."
@@ -201,6 +195,12 @@ Input is `org-pretty-tags-surrogate-images'."
              (plist-put (cdr img) :type 'imagemagick)
              img)))
    org-pretty-tags-surrogate-images))
+#+end_src
+
+#+begin_src emacs-lisp
+(defvar org-pretty-tags-image-cache
+  (org-pretty-tags-image-cache)
+  "Cache for the image surrogates.")
 #+end_src
 
 #+begin_src emacs-lisp
