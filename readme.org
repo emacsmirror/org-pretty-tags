@@ -372,8 +372,18 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
     (let ((org-pretty-tags-surrogate-strings
            '(("bar" . "&"))))
       (org-pretty-tags-mode)
-      (buffer-substring 8 9)
       (should (get-char-property 8 'display)))))
+
+(ert-deftest test-org-pretty-tags-2 ()
+  "a headline which looks like a tag does not get surrogated."
+  (with-temp-buffer
+    (insert "* :bar: :bar:
+")
+    (org-mode)
+    (let ((org-pretty-tags-surrogate-strings
+           '(("bar" . "&"))))
+      (org-pretty-tags-mode)
+      (should-not (get-char-property 4 'display)))))
 #+end_src
 
 **** Last Lines
