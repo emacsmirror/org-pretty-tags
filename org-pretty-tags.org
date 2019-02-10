@@ -40,18 +40,26 @@ activation.
 
 *** Definition
 
-Use =M-x customize-variable org-pretty-tags-alternative-strings= to
+#+name: description-define-surrogates
+#+begin_src text
+Use {M-x customize-variable RET org-pretty-tags-surrogate-strings RET} to
 define surrogate strings for tags.  E.g. add the pair "money", "$$$".
 
-Use =M-x customize-variable org-pretty-tags-alternative-images= to
+If you don't like the predefined surrogates then just delete them.
+
+Use {M-x customize-variable RET org-pretty-tags-surrogate-images} to
 define surrogate images for tags.  The definition of the image is
 expected to be a path to an image.  E.g. add the pair "org", "<path to
 org icon>".
+#+end_src
 
 *** Activate
 
-- Activate the mode with =M-x org-pretty-tags-mode=.
-- Deactivate the mode with a further =M-x org-pretty-tags-mode=.
+#+name: description-activate-surrogates
+#+begin_src text
+- Activate the mode with {M-x org-pretty-tags-mode RET}.
+- Deactivate the mode with a further {M-x org-pretty-tags-mode RET}.
+#+end_src
 
 ** Install
 
@@ -142,7 +150,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
-;; See the literate source file.
+;; <<description-define-surrogates>>
+;;
+;; <<description-activate-surrogates>>
+;;
+;; See also the literate source file.  E.g. see https://gitlab.com/marcowahl/org-pretty-tags.
 
 
 ;;; Code:
