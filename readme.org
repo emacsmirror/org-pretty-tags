@@ -216,7 +216,6 @@ Input is `org-pretty-tags-surrogate-images'."
 #+begin_src emacs-lisp
 (defun org-pretty-tags-update-image-cache ()
   "Update `org-pretty-tags-image-cache' from list `org-pretty-tags-surrogate-images'."
-  (interactive)
   (setq org-pretty-tags-image-cache (org-pretty-tags-image-cache)))
 #+end_src
 
