@@ -123,8 +123,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   - Note: these files are derived from the literate source.
 
 ** Tasks
-
-*** DONE Make sure only tags get the surrogate
+*** Open
+*** Closed
+**** DONE Make sure only tags get the surrogate
 
 - A match before the tag area gets replaced by the surrogate.
 
