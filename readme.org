@@ -287,15 +287,14 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
    (org-pretty-tags-mode
     (unless (derived-mode-p 'org-mode 'org-agenda-mode)
       (user-error "Attempt to activate pretty tags mode on non Org mode buffer.  Doing nothing.  Try with Org mode buffer."))
+    (org-pretty-tags-update-image-cache)
     (org-pretty-tags-refresh-overlays)
     (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
-    (add-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays)
-    (message "pretty tags overlays installed"))
+    (add-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays))
    (t
     (org-pretty-tags-delete-overlays)
     (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
-    (remove-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays)
-    (message "pretty tags overlays removed"))))
+    (remove-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays))))
 #+end_src
 
 *** Last Lines
@@ -316,8 +315,9 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
 *** Run Unittests
 
  - Evaluate the following source block to tangle the necessary and run
-   the unittests e.g. by following the link [[elisp:(progn
-   (org-babel-next-src-block) (org-babel-execute-src-block))]].
+   the unittests e.g. by following the link [[elisp:(progn (org-babel-next-src-block) (org-babel-execute-src-block))]]
+
+# <(trigger tests)>
 
 #+begin_src emacs-lisp :results silent
 (let ((apath "."))
