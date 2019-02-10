@@ -229,22 +229,48 @@ Input is `org-pretty-tags-surrogate-images'."
   (while org-pretty-tags-overlays
     (delete-overlay (pop org-pretty-tags-overlays))))
 
-(defun org-pretty-tags-refresh-overlays ()
-  "Overlay tags in current buffer."
-  (let ((inhibit-read-only t))
-    (org-pretty-tags-delete-overlays)
-    (mapc (lambda (x)
-            (org-with-point-at 1
-                                        ; try: make sure only tags are changed.
-                                        ; try: use org functionality to loop over the headings.
+(defun org-pretty-tags-refresh-overlays-agenda ()
+  (mapc (lambda (x)
+          (org-with-point-at 1
+            ;; try: make sure only tags are changed.
+            (progn
               (while (re-search-forward
                       (concat ":\\(" (car x) "\\):") nil t)
-                (when (or (derived-mode-p 'org-agenda-mode)
-                          (save-match-data (org-at-heading-p)))
+                (push (make-overlay (match-beginning 1) (match-end 1))
+                      org-pretty-tags-overlays)
+                (overlay-put (car org-pretty-tags-overlays) 'display (cdr x))))))
+        (append org-pretty-tags-surrogate-strings org-pretty-tags-image-cache)))
+
+(defun org-pretty-tags-refresh-overlays-org-mode ()
+  (assert (derived-mode-p 'org-mode))
+  (org-with-point-at 1
+    (unless (org-at-heading-p)
+      (outline-next-heading))
+    (let ((surrogates (append org-pretty-tags-surrogate-strings org-pretty-tags-image-cache)))
+      (while (not (eobp))
+        (assert (org-at-heading-p) "programm logic error.")
+        (org-match-line org-complex-heading-regexp)
+        (if (match-beginning 5)
+            (let ((tags-end (match-end 5)))
+              (goto-char (1+ (match-beginning 5)))
+              (while (re-search-forward
+                      (concat "\\(.+?\\):") tags-end t)
+                (when-let ((surrogate-cons (assoc (buffer-substring (match-beginning 1) (match-end 1))
+                                                  surrogates)))
                   (push (make-overlay (match-beginning 1) (match-end 1))
                         org-pretty-tags-overlays)
-                  (overlay-put (car org-pretty-tags-overlays) 'display (cdr x))))))
-          (append org-pretty-tags-surrogate-strings org-pretty-tags-image-cache))))
+                  (overlay-put (car org-pretty-tags-overlays) 'display (cdr surrogate-cons))))))
+        (outline-next-heading)))))
+
+(defun org-pretty-tags-refresh-overlays ()
+  "Overlay tags in current buffer.
+The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
+  (let ((inhibit-read-only t))
+    (org-pretty-tags-delete-overlays)
+    (cond
+     ((derived-mode-p 'org-agenda-mode) (org-pretty-tags-refresh-overlays-agenda))
+     ((derived-mode-p 'org-mode) (org-pretty-tags-refresh-overlays-org-mode))
+     (t (error "function does not deal with the current context")))))
 #+end_src
 
 **** define the mode
