@@ -8,10 +8,10 @@
 ;; Author: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Created: [2019-01-06]
-;; Version: 0.0.0
-;; Keywords: reading, outliner
-;; 
-;; This file is not part of Emacs.
+;; Version: 0.0.1
+;; Package-Requires: ((emacs "25"))
+;; Keywords: reading, outlines
+;; URL: https://gitlab.com/marcowahl/org-pretty-tags
 ;; 
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by

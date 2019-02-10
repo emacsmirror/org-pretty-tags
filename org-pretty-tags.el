@@ -7,10 +7,10 @@
 ;; Author: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Created: [2019-01-06]
-;; Version: 0.0.0
-;; Keywords: reading, outliner
-;; 
-;; This file is not part of Emacs.
+;; Version: 0.0.1
+;; Package-Requires: ((emacs "25"))
+;; Keywords: reading, outlines
+;; URL: https://gitlab.com/marcowahl/org-pretty-tags
 ;; 
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -28,7 +28,20 @@
 
 ;;; Commentary:
 
-;; See the literate source file.
+;; Use {M-x customize-variable RET org-pretty-tags-surrogate-strings RET} to
+;; define surrogate strings for tags.  E.g. add the pair "money", "$$$".
+;; 
+;; If you don't like the predefined surrogates then just delete them.
+;; 
+;; Use {M-x customize-variable RET org-pretty-tags-surrogate-images} to
+;; define surrogate images for tags.  The definition of the image is
+;; expected to be a path to an image.  E.g. add the pair "org", "<path to
+;; org icon>".
+;;
+;; - Activate the mode with {M-x org-pretty-tags-mode RET}.
+;; - Deactivate the mode with a further {M-x org-pretty-tags-mode RET}.
+;;
+;; See also the literate source file.  E.g. see https://gitlab.com/marcowahl/org-pretty-tags.
 
 
 ;;; Code:
