@@ -35,6 +35,9 @@ Note that the actual tag is not changed by the mode, it's just decoration.
 
 ** Use
 
+It's easy.  The mode adds very little for customization and
+activation.
+
 *** Definition
 
 Use =M-x customize-variable org-pretty-tags-alternative-strings= to
@@ -48,7 +51,6 @@ org icon>".
 *** Activate
 
 - Activate the mode with =M-x org-pretty-tags-mode=.
-
 - Deactivate the mode with a further =M-x org-pretty-tags-mode=.
 
 ** Install
