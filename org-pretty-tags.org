@@ -62,21 +62,33 @@ Install by adding the respective lines to your init.e (as usual):
 (require 'org-pretty-tags)
 #+end_src
 
+** Package Metadata
+
+#+name: org-pretty-tags-version
+#+begin_src text
+0.0.1
+#+end_src
+
+#+name: package-metadata
+#+begin_src text :noweb yes
+Author: Marco Wahl <marcowahlsoft@gmail.com>
+Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
+Created: [2019-01-06]
+Version: <<org-pretty-tags-version>>
+Package-Requires: ((emacs "25"))
+Keywords: reading, outlines
+URL: https://gitlab.com/marcowahl/org-pretty-tags
+#+end_src
+
 ** License
 
 *** Copyright
 
 #+name: copyright
-#+begin_src text
+#+begin_src text :noweb yes
 Copyright 2019 Marco Wahl
 
-Author: Marco Wahl <marcowahlsoft@gmail.com>
-Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
-Created: [2019-01-06]
-Version: 0.0.0
-Keywords: reading, outliner
-
-This file is not part of Emacs.
+<<package-metadata>>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
