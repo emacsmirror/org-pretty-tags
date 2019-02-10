@@ -86,12 +86,6 @@
 
 
 ;; [[id:fb26c0bc-a69e-4cd2-8b5a-800682d24706][cache for the images:1]]
-(defvar org-pretty-tags-image-cache
-  (org-pretty-tags-image-cache)
-  "Cache for the image surrogates.")
-;; cache for the images:1 ends here
-
-;; [[id:fb26c0bc-a69e-4cd2-8b5a-800682d24706][cache for the images:2]]
 (defun org-pretty-tags-image-cache ()
   "Return a map from tag to image.
 Input is `org-pretty-tags-surrogate-images'."
@@ -108,12 +102,17 @@ Input is `org-pretty-tags-surrogate-images'."
              (plist-put (cdr img) :type 'imagemagick)
              img)))
    org-pretty-tags-surrogate-images))
+;; cache for the images:1 ends here
+
+;; [[id:fb26c0bc-a69e-4cd2-8b5a-800682d24706][cache for the images:2]]
+(defvar org-pretty-tags-image-cache
+  (org-pretty-tags-image-cache)
+  "Cache for the image surrogates.")
 ;; cache for the images:2 ends here
 
 ;; [[id:fb26c0bc-a69e-4cd2-8b5a-800682d24706][cache for the images:3]]
 (defun org-pretty-tags-update-image-cache ()
   "Update `org-pretty-tags-image-cache' from list `org-pretty-tags-surrogate-images'."
-  (interactive)
   (setq org-pretty-tags-image-cache (org-pretty-tags-image-cache)))
 ;; cache for the images:3 ends here
 
@@ -128,22 +127,48 @@ Input is `org-pretty-tags-surrogate-images'."
   (while org-pretty-tags-overlays
     (delete-overlay (pop org-pretty-tags-overlays))))
 
-(defun org-pretty-tags-refresh-overlays ()
-  "Overlay tags in current buffer."
-  (let ((inhibit-read-only t))
-    (org-pretty-tags-delete-overlays)
-    (mapc (lambda (x)
-            (org-with-point-at 1
-                                        ; try: make sure only tags are changed.
-                                        ; try: use org functionality to loop over the headings.
+(defun org-pretty-tags-refresh-overlays-agenda ()
+  (mapc (lambda (x)
+          (org-with-point-at 1
+            ;; try: make sure only tags are changed.
+            (progn
               (while (re-search-forward
                       (concat ":\\(" (car x) "\\):") nil t)
-                (when (or (derived-mode-p 'org-agenda-mode)
-                          (save-match-data (org-at-heading-p)))
+                (push (make-overlay (match-beginning 1) (match-end 1))
+                      org-pretty-tags-overlays)
+                (overlay-put (car org-pretty-tags-overlays) 'display (cdr x))))))
+        (append org-pretty-tags-surrogate-strings org-pretty-tags-image-cache)))
+
+(defun org-pretty-tags-refresh-overlays-org-mode ()
+  (assert (derived-mode-p 'org-mode))
+  (org-with-point-at 1
+    (unless (org-at-heading-p)
+      (outline-next-heading))
+    (let ((surrogates (append org-pretty-tags-surrogate-strings org-pretty-tags-image-cache)))
+      (while (not (eobp))
+        (assert (org-at-heading-p) "programm logic error.")
+        (org-match-line org-complex-heading-regexp)
+        (if (match-beginning 5)
+            (let ((tags-end (match-end 5)))
+              (goto-char (1+ (match-beginning 5)))
+              (while (re-search-forward
+                      (concat "\\(.+?\\):") tags-end t)
+                (when-let ((surrogate-cons (assoc (buffer-substring (match-beginning 1) (match-end 1))
+                                                  surrogates)))
                   (push (make-overlay (match-beginning 1) (match-end 1))
                         org-pretty-tags-overlays)
-                  (overlay-put (car org-pretty-tags-overlays) 'display (cdr x))))))
-          (append org-pretty-tags-surrogate-strings org-pretty-tags-image-cache))))
+                  (overlay-put (car org-pretty-tags-overlays) 'display (cdr surrogate-cons))))))
+        (outline-next-heading)))))
+
+(defun org-pretty-tags-refresh-overlays ()
+  "Overlay tags in current buffer.
+The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
+  (let ((inhibit-read-only t))
+    (org-pretty-tags-delete-overlays)
+    (cond
+     ((derived-mode-p 'org-agenda-mode) (org-pretty-tags-refresh-overlays-agenda))
+     ((derived-mode-p 'org-mode) (org-pretty-tags-refresh-overlays-org-mode))
+     (t (error "function does not deal with the current context")))))
 ;; function to update the tag surrogates:1 ends here
 
 ;; define the mode
@@ -161,15 +186,14 @@ Input is `org-pretty-tags-surrogate-images'."
    (org-pretty-tags-mode
     (unless (derived-mode-p 'org-mode 'org-agenda-mode)
       (user-error "Attempt to activate pretty tags mode on non Org mode buffer.  Doing nothing.  Try with Org mode buffer."))
+    (org-pretty-tags-update-image-cache)
     (org-pretty-tags-refresh-overlays)
     (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
-    (add-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays)
-    (message "pretty tags overlays installed"))
+    (add-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays))
    (t
     (org-pretty-tags-delete-overlays)
     (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
-    (remove-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays)
-    (message "pretty tags overlays removed"))))
+    (remove-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays))))
 ;; define the mode:1 ends here
 
 
