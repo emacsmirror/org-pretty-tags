@@ -74,7 +74,7 @@ Install by adding the respective lines to your init.e (as usual):
 
 #+name: org-pretty-tags-version
 #+begin_src text
-0.0.1
+0.0.2
 #+end_src
 
 #+name: package-metadata
