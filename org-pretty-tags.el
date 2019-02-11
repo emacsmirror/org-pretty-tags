@@ -184,6 +184,20 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
      (t (error "function does not deal with the current context")))))
 ;; function to update the tag surrogates:1 ends here
 
+;; a state for the agenda
+;; :PROPERTIES:
+;; :ID:       76092d7a-c901-48dd-8e03-b0de116fd839
+;; :END:
+
+;; the agenda gets rebuild from scratch.  therefore the need to store the
+;; pretty tags state.
+
+
+;; [[id:76092d7a-c901-48dd-8e03-b0de116fd839][a state for the agenda:1]]
+(defvar org-pretty-tags-agenda-in-the-mode nil
+  "Indicator if the agenda is in pretty-tags-mode.")
+;; a state for the agenda:1 ends here
+
 ;; define the mode
 ;; :PROPERTIES:
 ;; :ID:       a3d9cc59-89aa-4165-a844-90da8531b46f
@@ -196,17 +210,31 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
   "Display surrogates for tags."
   :lighter " pretty tags"
   (cond
-   (org-pretty-tags-mode
-    (unless (derived-mode-p 'org-mode 'org-agenda-mode)
-      (user-error "Attempt to activate pretty tags mode on non Org mode buffer.  Doing nothing.  Try with Org mode buffer."))
-    (org-pretty-tags-update-image-cache)
-    (org-pretty-tags-refresh-overlays)
-    (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
-    (add-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays))
-   (t
-    (org-pretty-tags-delete-overlays)
-    (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
-    (remove-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays))))
+   ((derived-mode-p 'org-mode)
+    (cond
+     (org-pretty-tags-mode
+      (org-pretty-tags-update-image-cache)
+      (org-pretty-tags-refresh-overlays)
+      (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
+      (add-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays))
+     (t
+      (org-pretty-tags-delete-overlays)
+      (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
+      (remove-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays))))
+   ((derived-mode-p  'org-agenda-mode)
+    (setq org-pretty-tags-agenda-in-the-mode (not org-pretty-tags-agenda-in-the-mode))
+    (if org-pretty-tags-agenda-in-the-mode
+        (progn
+         (org-pretty-tags-update-image-cache)
+         (org-pretty-tags-refresh-overlays)
+         (add-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays))
+     (org-pretty-tags-delete-overlays)
+     (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays))
+    (setq org-pretty-tags-mode org-pretty-tags-agenda-in-the-mode))
+   (t (user-error (concat
+                   "Attempt to activate pretty tags mode on non Org mode buffer."
+                   "  Doing nothing."
+                   "  Effect in Org mode buffer or Org Agenda buffer.")))))
 ;; define the mode:1 ends here
 
 
