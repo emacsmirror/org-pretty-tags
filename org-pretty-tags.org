@@ -316,12 +316,20 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
       (user-error "Attempt to activate pretty tags mode on non Org mode buffer.  Doing nothing.  Try with Org mode buffer."))
     (org-pretty-tags-update-image-cache)
     (org-pretty-tags-refresh-overlays)
-    (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
-    (add-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays))
+    (cond
+     ((derived-mode-p 'org-mode)
+      (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
+      (add-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays))
+     ((derived-mode-p 'org-agenda-mode)
+      (add-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays))))
    (t
     (org-pretty-tags-delete-overlays)
-    (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
-    (remove-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays))))
+    (cond
+     ((derived-mode-p 'org-mode)
+      (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
+      (remove-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays))
+     ((derived-mode-p 'org-agenda-mode)
+      (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays))))))
 #+end_src
 
 *** Last Lines
