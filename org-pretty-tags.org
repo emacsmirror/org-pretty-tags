@@ -119,8 +119,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ** Files
 
 - org-pretty-tags.org ::  The literate source
-- readme.org :: Identical to the literate source file.
-  - With this filename the content shows up automatically e.g. on gitlab.
+- readme.org :: Hardlink to the literate source file.
+  - With this filename its content shows up nicely and automatically
+    e.g. on the front page of gitlab.
 - LICENSE :: GPL3 license.
 - data :: Artefacts.  E.g. images for documentation.
 - *.el :: Elisp source files.
