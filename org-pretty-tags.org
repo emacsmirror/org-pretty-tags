@@ -205,7 +205,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 :END:
 
 #+begin_src emacs-lisp
-(defvar-local org-pretty-tags-overlays nil
+(defvar org-pretty-tags-overlays nil
  "Container for the overlays of org-pretty-tags-mode.")
 #+end_src
 
