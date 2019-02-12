@@ -70,6 +70,10 @@ Install by adding the respective lines to your init.e (as usual):
 (require 'org-pretty-tags)
 #+end_src
 
+If =org-pretty-tags= gets accepted as a package then one can use
+alternatively the package manager which is able to connect to melpa
+for the install.
+
 ** Package Metadata
 
 #+name: org-pretty-tags-version
