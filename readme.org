@@ -1,6 +1,6 @@
 #+title: Surrogates for tags
 
-* About :imp:
+* About
 :PROPERTIES:
 :EXPORT_FILE_NAME: doc-org-pretty-tags
 :END:
@@ -63,7 +63,7 @@ org icon>".
 - Deactivate the mode with a further {M-x org-pretty-tags-mode RET}.
 #+end_src
 
-*** Weaknesses
+*** Hints
 
 The mode is not able to update the tag surrogates for every scenario.
 
@@ -73,7 +73,16 @@ org-pretty-tags-mode off and on again.  E.g. two times
 {M-x org-pretty-tags-mode RET}.
 
 If tag surrogates do not go away then save that file, kill the buffer
-and reload the file.
+and reload the file.  org-pretty-tags-mode should act normal again.
+
+Take care about the text hidden under the surrogates which can still
+be modified.
+To see the effect enable org-pretty-tags-mode.
+- Place the cursor on a surrogate.
+- Press delete.
+- Toggle the mode with {M-x org-pretty-tags-mode RET}.
+
+See that one character is missing.
 
 ** Install
 
@@ -196,8 +205,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 :END:
 
 #+begin_src emacs-lisp
-(defvar-local org-pretty-tags-overlays nil
+(defvar org-pretty-tags-overlays nil
  "Container for the overlays of org-pretty-tags-mode.")
+#+end_src
+
+**** customize group
+:PROPERTIES:
+:ID:       bb36699d-67d2-4313-a74c-9ef3bb83b7d4
+:END:
+
+#+begin_src emacs-lisp
+(defgroup org-pretty-tags nil
+  "Options for Org Pretty Tags"
+  ;; :tag "Org Pretty Tags"
+  :group 'org-tags)
 #+end_src
 
 **** list of tags with symbols surrogates for plain ascii tags
@@ -215,7 +236,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     ("music" . "♬"))
   "List of pretty replacements for tags."
   :type '(alist :key-type string :value-type string)
-  :group 'org-tags)
+  :group 'org-pretty-tags)
 #+end_src
 
 **** list of image surrogates for plain ascii tags
@@ -229,7 +250,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   '()
   "List of pretty image replacements for tags."
   :type '(alist :key-type string :value-type string)
-  :group 'org-tags)
+  :group 'org-pretty-tags)
 #+end_src
 
 **** cache for the images
@@ -321,20 +342,6 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
      ((derived-mode-p 'org-agenda-mode) (org-pretty-tags-refresh-overlays-agenda))
      ((derived-mode-p 'org-mode) (org-pretty-tags-refresh-overlays-org-mode))
      (t (error "function does not deal with the current context")))))
-#+end_src
-
-
-**** a state for the agenda
-:PROPERTIES:
-:ID:       76092d7a-c901-48dd-8e03-b0de116fd839
-:END:
-
-the agenda gets rebuild from scratch.  therefore the need to store the
-pretty tags state.
-
-#+begin_src emacs-lisp
-(defvar org-pretty-tags-agenda-in-the-mode nil
-  "Indicator if the agenda is in pretty-tags-mode.")
 #+end_src
 
 **** define the mode

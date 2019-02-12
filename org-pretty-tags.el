@@ -3,7 +3,7 @@
 ;; THIS FILE HAS BEEN GENERATED.  see the literate source.
 
 ;; Copyright 2019 Marco Wahl
-;;
+;; 
 ;; Author: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Created: [2019-01-06]
@@ -11,17 +11,17 @@
 ;; Package-Requires: ((emacs "25"))
 ;; Keywords: reading, outlines
 ;; URL: https://gitlab.com/marcowahl/org-pretty-tags
-;;
+;; 
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
-;;
+;; 
 ;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
-;;
+;; 
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -30,9 +30,9 @@
 
 ;; Use {M-x customize-variable RET org-pretty-tags-surrogate-strings RET} to
 ;; define surrogate strings for tags.  E.g. add the pair "money", "$$$".
-;;
+;; 
 ;; If you don't like the predefined surrogates then just delete them.
-;;
+;; 
 ;; Use {M-x customize-variable RET org-pretty-tags-surrogate-images} to
 ;; define surrogate images for tags.  The definition of the image is
 ;; expected to be a path to an image.  E.g. add the pair "org", "<path to
@@ -53,9 +53,22 @@
 
 
 ;; [[id:cf2048b2-5f4e-4211-873d-9bce13c53f59][container for the overlays:1]]
-(defvar-local org-pretty-tags-overlays nil
+(defvar org-pretty-tags-overlays nil
  "Container for the overlays of org-pretty-tags-mode.")
 ;; container for the overlays:1 ends here
+
+;; customize group
+;; :PROPERTIES:
+;; :ID:       bb36699d-67d2-4313-a74c-9ef3bb83b7d4
+;; :END:
+
+
+;; [[id:bb36699d-67d2-4313-a74c-9ef3bb83b7d4][customize group:1]]
+(defgroup org-pretty-tags nil
+  "Options for Org Pretty Tags"
+  ;; :tag "Org Pretty Tags"
+  :group 'org-tags)
+;; customize group:1 ends here
 
 ;; list of tags with symbols surrogates for plain ascii tags
 ;; :PROPERTIES:
@@ -73,7 +86,7 @@
     ("music" . "♬"))
   "List of pretty replacements for tags."
   :type '(alist :key-type string :value-type string)
-  :group 'org-tags)
+  :group 'org-pretty-tags)
 ;; list of tags with symbols surrogates for plain ascii tags:1 ends here
 
 ;; list of image surrogates for plain ascii tags
@@ -88,7 +101,7 @@
   '()
   "List of pretty image replacements for tags."
   :type '(alist :key-type string :value-type string)
-  :group 'org-tags)
+  :group 'org-pretty-tags)
 ;; list of image surrogates for plain ascii tags:1 ends here
 
 ;; cache for the images
@@ -183,20 +196,6 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
      ((derived-mode-p 'org-mode) (org-pretty-tags-refresh-overlays-org-mode))
      (t (error "function does not deal with the current context")))))
 ;; function to update the tag surrogates:1 ends here
-
-;; a state for the agenda
-;; :PROPERTIES:
-;; :ID:       76092d7a-c901-48dd-8e03-b0de116fd839
-;; :END:
-
-;; the agenda gets rebuild from scratch.  therefore the need to store the
-;; pretty tags state.
-
-
-;; [[id:76092d7a-c901-48dd-8e03-b0de116fd839][a state for the agenda:1]]
-(defvar org-pretty-tags-agenda-in-the-mode nil
-  "Indicator if the agenda is in pretty-tags-mode.")
-;; a state for the agenda:1 ends here
 
 ;; define the mode
 ;; :PROPERTIES:
