@@ -3,7 +3,7 @@
 ;; THIS FILE HAS BEEN GENERATED.  see the literate source.
 
 ;; Copyright 2019 Marco Wahl
-;; 
+;;
 ;; Author: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Created: [2019-01-06]
@@ -11,17 +11,17 @@
 ;; Package-Requires: ((emacs "25"))
 ;; Keywords: reading, outlines
 ;; URL: https://gitlab.com/marcowahl/org-pretty-tags
-;; 
+;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
-;; 
+;;
 ;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
-;; 
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -30,9 +30,9 @@
 
 ;; Use {M-x customize-variable RET org-pretty-tags-surrogate-strings RET} to
 ;; define surrogate strings for tags.  E.g. add the pair "money", "$$$".
-;; 
+;;
 ;; If you don't like the predefined surrogates then just delete them.
-;; 
+;;
 ;; Use {M-x customize-variable RET org-pretty-tags-surrogate-images} to
 ;; define surrogate images for tags.  The definition of the image is
 ;; expected to be a path to an image.  E.g. add the pair "org", "<path to
@@ -214,6 +214,7 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
    (org-pretty-tags-mode
     (org-pretty-tags-update-image-cache)
     (dolist (buf (buffer-list))
+      (set-buffer buf)
       (when (derived-mode-p 'org-mode 'org-agenda-mode)
         (org-pretty-tags-delete-overlays)
         (org-pretty-tags-refresh-overlays)))
@@ -222,6 +223,7 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
     (add-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays))
    (t
     (dolist (buf (buffer-list))
+      (set-buffer buf)
       (when (derived-mode-p 'org-mode 'org-agenda-mode)
         (org-pretty-tags-delete-overlays)))
     (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
