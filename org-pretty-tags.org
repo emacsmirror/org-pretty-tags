@@ -16,9 +16,11 @@ wider range of tags could be nice.
 ** What the mode offers
 
 - A way to define surrogate strings and surrogate images for certain tags.
-- Overlay the tags with the surrogates.
+- Overlay the tags with the surrogates for Org mode files and Org agendas.
 
-Note that the actual tag is not changed by the mode, it's just decoration.
+Notes:
+- The actual tag is not changed by the mode, it's just decoration.
+- The mode is global.  Either on or off for all Org mode buffers.
 
 *** Example :ATTACH:
 :PROPERTIES:
@@ -33,7 +35,7 @@ Note that the actual tag is not changed by the mode, it's just decoration.
 
 [[data/a0/a7f0d8-cdc8-414b-a715-e48205d07deb/emacsshot.win-20190106143055.png]]
 
-** Use
+** Use :easy:
 
 It's easy.  The mode adds very little for customization and
 activation.
@@ -60,6 +62,27 @@ org icon>".
 - Activate the mode with {M-x org-pretty-tags-mode RET}.
 - Deactivate the mode with a further {M-x org-pretty-tags-mode RET}.
 #+end_src
+
+*** Hints
+
+The mode is not able to update the tag surrogates for every scenario.
+
+If the tag surrogates should be in place but are not then turn
+org-pretty-tags-mode off and on again.  E.g. two times
+
+{M-x org-pretty-tags-mode RET}.
+
+If tag surrogates do not go away then save that file, kill the buffer
+and reload the file.  org-pretty-tags-mode should act normal again.
+
+Take care about the text hidden under the surrogates which can still
+be modified.
+To see the effect enable org-pretty-tags-mode.
+- Place the cursor on a surrogate.
+- Press delete.
+- Toggle the mode with {M-x org-pretty-tags-mode RET}.
+
+See that one character is missing.
 
 ** Install
 
