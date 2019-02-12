@@ -76,10 +76,16 @@ for the install.
 
 ** Package Metadata
 
+*** Version
+
 #+name: org-pretty-tags-version
 #+begin_src text
 0.0.2
 #+end_src
+
+*** Typical Metadata
+
+Author, contact, dependencies.
 
 #+name: package-metadata
 #+begin_src text :noweb yes
@@ -91,8 +97,6 @@ Package-Requires: ((emacs "25"))
 Keywords: reading, outlines
 URL: https://gitlab.com/marcowahl/org-pretty-tags
 #+end_src
-
-** License
 
 *** Copyright
 
