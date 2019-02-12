@@ -209,32 +209,24 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
 (define-minor-mode org-pretty-tags-mode
   "Display surrogates for tags."
   :lighter " pretty tags"
+  :global t
   (cond
-   ((derived-mode-p 'org-mode)
-    (cond
-     (org-pretty-tags-mode
-      (org-pretty-tags-update-image-cache)
-      (org-pretty-tags-refresh-overlays)
-      (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
-      (add-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays))
-     (t
-      (org-pretty-tags-delete-overlays)
-      (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
-      (remove-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays))))
-   ((derived-mode-p  'org-agenda-mode)
-    (setq org-pretty-tags-agenda-in-the-mode (not org-pretty-tags-agenda-in-the-mode))
-    (if org-pretty-tags-agenda-in-the-mode
-        (progn
-         (org-pretty-tags-update-image-cache)
-         (org-pretty-tags-refresh-overlays)
-         (add-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays))
-     (org-pretty-tags-delete-overlays)
-     (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays))
-    (setq org-pretty-tags-mode org-pretty-tags-agenda-in-the-mode))
-   (t (user-error (concat
-                   "Attempt to activate pretty tags mode on non Org mode buffer."
-                   "  Doing nothing."
-                   "  Effect in Org mode buffer or Org Agenda buffer.")))))
+   (org-pretty-tags-mode
+    (org-pretty-tags-update-image-cache)
+    (dolist (buf (buffer-list))
+      (when (derived-mode-p 'org-mode 'org-agenda-mode)
+        (org-pretty-tags-delete-overlays)
+        (org-pretty-tags-refresh-overlays)))
+    (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
+    (add-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays)
+    (add-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays))
+   (t
+    (dolist (buf (buffer-list))
+      (when (derived-mode-p 'org-mode 'org-agenda-mode)
+        (org-pretty-tags-delete-overlays)))
+    (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
+    (remove-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays)
+    (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays))))
 ;; define the mode:1 ends here
 
 
