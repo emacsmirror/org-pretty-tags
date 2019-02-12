@@ -338,6 +338,7 @@ pretty tags state.
    (org-pretty-tags-mode
     (org-pretty-tags-update-image-cache)
     (dolist (buf (buffer-list))
+      (set-buffer buf)
       (when (derived-mode-p 'org-mode 'org-agenda-mode)
         (org-pretty-tags-delete-overlays)
         (org-pretty-tags-refresh-overlays)))
@@ -346,6 +347,7 @@ pretty tags state.
     (add-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays))
    (t
     (dolist (buf (buffer-list))
+      (set-buffer buf)
       (when (derived-mode-p 'org-mode 'org-agenda-mode)
         (org-pretty-tags-delete-overlays)))
     (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
