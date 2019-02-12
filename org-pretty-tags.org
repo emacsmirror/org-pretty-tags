@@ -332,20 +332,6 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
      (t (error "function does not deal with the current context")))))
 #+end_src
 
-
-**** a state for the agenda
-:PROPERTIES:
-:ID:       76092d7a-c901-48dd-8e03-b0de116fd839
-:END:
-
-the agenda gets rebuild from scratch.  therefore the need to store the
-pretty tags state.
-
-#+begin_src emacs-lisp
-(defvar org-pretty-tags-agenda-in-the-mode nil
-  "Indicator if the agenda is in pretty-tags-mode.")
-#+end_src
-
 **** define the mode
 :PROPERTIES:
 :ID:       a3d9cc59-89aa-4165-a844-90da8531b46f
