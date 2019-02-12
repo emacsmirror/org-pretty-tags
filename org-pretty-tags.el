@@ -70,7 +70,7 @@
     ("idea" . "💡") ; inspiration.
     ("money" . "$$$")
     ("easy" . "₰")
-    ("music" . "♩"))
+    ("music" . "♬"))
   "List of pretty replacements for tags."
   :type '(alist :key-type string :value-type string)
   :group 'org-tags)
