@@ -63,7 +63,7 @@ org icon>".
 
 ** Install
 
-Install by adding the respective lines to your init.e (as usual):
+Install by adding the respective lines to your init.el (as usual):
 
 #+begin_src emacs-lisp :tangle no
 (push "<path/to/org-pretty-tags>" load-path)
