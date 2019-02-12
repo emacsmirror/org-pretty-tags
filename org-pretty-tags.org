@@ -209,6 +209,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  "Container for the overlays of org-pretty-tags-mode.")
 #+end_src
 
+**** customize group
+:PROPERTIES:
+:ID:       bb36699d-67d2-4313-a74c-9ef3bb83b7d4
+:END:
+
+#+begin_src emacs-lisp
+(defgroup org-pretty-tags nil
+  "Options for Org Pretty Tags"
+  ;; :tag "Org Pretty Tags"
+  :group 'org-tags)
+#+end_src
+
 **** list of tags with symbols surrogates for plain ascii tags
 :PROPERTIES:
 :ID:       16c25206-73c2-422b-8948-979c415b75de
@@ -224,7 +236,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     ("music" . "♬"))
   "List of pretty replacements for tags."
   :type '(alist :key-type string :value-type string)
-  :group 'org-tags)
+  :group 'org-pretty-tags)
 #+end_src
 
 **** list of image surrogates for plain ascii tags
@@ -238,7 +250,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   '()
   "List of pretty image replacements for tags."
   :type '(alist :key-type string :value-type string)
-  :group 'org-tags)
+  :group 'org-pretty-tags)
 #+end_src
 
 **** cache for the images
