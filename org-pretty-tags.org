@@ -103,7 +103,7 @@ for the install.
 
 #+name: org-pretty-tags-version
 #+begin_src text
-0.0.2
+0.1.0
 #+end_src
 
 *** Typical Metadata
