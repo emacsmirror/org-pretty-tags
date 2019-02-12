@@ -63,12 +63,16 @@ org icon>".
 
 ** Install
 
-Install by adding the respective lines to your init.e (as usual):
+Install by adding the respective lines to your init.el (as usual):
 
 #+begin_src emacs-lisp :tangle no
 (push "<path/to/org-pretty-tags>" load-path)
 (require 'org-pretty-tags)
 #+end_src
+
+If =org-pretty-tags= gets accepted as a package then one can use
+alternatively the package manager which is able to connect to melpa
+for the install.
 
 ** Package Metadata
 
@@ -189,7 +193,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     ("idea" . "💡") ; inspiration.
     ("money" . "$$$")
     ("easy" . "₰")
-    ("music" . "♩"))
+    ("music" . "♬"))
   "List of pretty replacements for tags."
   :type '(alist :key-type string :value-type string)
   :group 'org-tags)
