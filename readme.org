@@ -333,15 +333,21 @@ Input is `org-pretty-tags-surrogate-images'."
                   (overlay-put (car org-pretty-tags-overlays) 'display (cdr surrogate-cons))))))
         (outline-next-heading)))))
 
-(defun org-pretty-tags-refresh-overlays ()
+(defun org-pretty-tags-refresh-overlays-buffer ()
   "Overlay tags in current buffer.
 The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
   (let ((inhibit-read-only t))
-    (org-pretty-tags-delete-overlays)
     (cond
      ((derived-mode-p 'org-agenda-mode) (org-pretty-tags-refresh-overlays-agenda))
      ((derived-mode-p 'org-mode) (org-pretty-tags-refresh-overlays-org-mode))
      (t (error "function does not deal with the current context")))))
+
+(defun org-pretty-tags-refresh-overlays-all-buffers ()
+  "Overlay tags in all Org buffers."
+  (dolist (buf (buffer-list))
+    (set-buffer buf)
+    (when (derived-mode-p 'org-mode 'org-agenda-mode)
+      (org-pretty-tags-refresh-overlays-buffer))))
 #+end_src
 
 **** define the mode
@@ -358,22 +364,16 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
   (cond
    (org-pretty-tags-mode
     (org-pretty-tags-update-image-cache)
-    (dolist (buf (buffer-list))
-      (set-buffer buf)
-      (when (derived-mode-p 'org-mode 'org-agenda-mode)
-        (org-pretty-tags-delete-overlays)
-        (org-pretty-tags-refresh-overlays)))
-    (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
-    (add-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays)
-    (add-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays))
+    (org-pretty-tags-delete-overlays)
+    (org-pretty-tags-refresh-overlays-all-buffers)
+    (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-buffer)
+    (add-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays-buffer)
+    (add-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays-buffer))
    (t
-    (dolist (buf (buffer-list))
-      (set-buffer buf)
-      (when (derived-mode-p 'org-mode 'org-agenda-mode)
-        (org-pretty-tags-delete-overlays)))
-    (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays)
-    (remove-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays)
-    (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays))))
+    (org-pretty-tags-delete-overlays)
+    (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-buffer)
+    (remove-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays-buffer)
+    (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays-buffer))))
 #+end_src
 
 *** Last Lines
