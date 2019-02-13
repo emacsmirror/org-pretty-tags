@@ -93,9 +93,12 @@ Install by adding the respective lines to your init.el (as usual):
 (require 'org-pretty-tags)
 #+end_src
 
-If =org-pretty-tags= gets accepted as a package then one can use
-alternatively the package manager which is able to connect to melpa
-for the install.
+If =org-pretty-tags= gets accepted as a package then one can install
+the mode with the package manager build into Emacs.
+
+Then there would be no need for extra lines in the Emacs init file to
+activate the package after the install if I understand correctly.  We
+will see.
 
 ** Package Metadata
 
@@ -156,8 +159,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ** Tasks
 *** Open
+**** TODO Update the docu according to the reaction on melpa
 *** Closed
-**** DONE Make sure only tags get the surrogate
+**** DONE +Make sure only tags get the surrogate+
 
 - +A match before the tag area gets replaced by the surrogate.+
 
