@@ -107,7 +107,7 @@ will see.
 
 #+name: org-pretty-tags-version
 #+begin_src text
-0.1.0
+0.1.1
 #+end_src
 
 *** Typical Metadata
