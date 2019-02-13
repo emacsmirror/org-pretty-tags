@@ -65,24 +65,25 @@ org icon>".
 
 *** Hints
 
-The mode is not able to update the tag surrogates for every scenario.
+- Recommendation: change tags with the key sequence =C-c C-c= on the
+  headline.  Then =org-pretty-tags= can do the right thing.
 
-If the tag surrogates should be in place but are not then turn
-org-pretty-tags-mode off and on again.  E.g. two times
+- The mode is not able to update the tag surrogates for every scenario.
 
-{M-x org-pretty-tags-mode RET}.
+- If the tag surrogates should be in place but are not then turn
+  org-pretty-tags-mode off and on again.  E.g. two times ={M-x
+  org-pretty-tags-mode RET}=.
 
-If tag surrogates do not go away then save that file, kill the buffer
-and reload the file.  org-pretty-tags-mode should act normal again.
+- If tag surrogates do not go away then save that file, kill the
+  buffer and reload the file.  org-pretty-tags-mode should act normal
+  again.
 
-Take care about the text hidden under the surrogates which can still
-be modified.
-To see the effect enable org-pretty-tags-mode.
-- Place the cursor on a surrogate.
-- Press delete.
-- Toggle the mode with {M-x org-pretty-tags-mode RET}.
-
-See that one character is missing.
+- Take care about the text hidden under the surrogates which can still be modified.
+  - To see the effect enable org-pretty-tags-mode.
+    - Place the cursor on a surrogate.
+    - Press delete.
+    - Toggle the mode with {M-x org-pretty-tags-mode RET}.
+    - Result: See that one character is missing.
 
 ** Install
 
