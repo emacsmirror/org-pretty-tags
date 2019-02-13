@@ -19,7 +19,8 @@ wider range of tags could be nice.
 - Overlay the tags with the surrogates for Org mode files and Org agendas.
 
 Notes:
-- The actual tag is not changed by the mode, it's just decoration.
+- The actual tag is not changed by the mode.  The surrogates are just
+  decoration.
 - The mode is global.  Either on or off for all Org mode buffers.
 
 *** Example :ATTACH:
@@ -37,10 +38,17 @@ Notes:
 
 ** Use :easy:
 
-It's easy.  The mode adds very little for customization and
-activation.
+It's easy!
 
-*** Definition
+*** Activate
+
+#+name: description-activate-surrogates
+#+begin_src text
+- Activate the mode with {M-x org-pretty-tags-mode RET}.
+- Deactivate the mode with a further {M-x org-pretty-tags-mode RET}.
+#+end_src
+
+*** Definition of the Surrogates
 
 #+name: description-define-surrogates
 #+begin_src text
@@ -49,18 +57,10 @@ define surrogate strings for tags.  E.g. add the pair "money", "$$$".
 
 If you don't like the predefined surrogates then just delete them.
 
-Use {M-x customize-variable RET org-pretty-tags-surrogate-images} to
+Use {M-x customize-variable RET org-pretty-tags-surrogate-images RET} to
 define surrogate images for tags.  The definition of the image is
 expected to be a path to an image.  E.g. add the pair "org", "<path to
 org icon>".
-#+end_src
-
-*** Activate
-
-#+name: description-activate-surrogates
-#+begin_src text
-- Activate the mode with {M-x org-pretty-tags-mode RET}.
-- Deactivate the mode with a further {M-x org-pretty-tags-mode RET}.
 #+end_src
 
 *** Hints
@@ -183,9 +183,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
-;; <<description-define-surrogates>>
-;;
 ;; <<description-activate-surrogates>>
+;;
+;; <<description-define-surrogates>>
 ;;
 ;; See also the literate source file.  E.g. see https://gitlab.com/marcowahl/org-pretty-tags.
 
