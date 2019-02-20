@@ -1,6 +1,9 @@
 ;;; org-pretty-tags.el --- Surrogates for tags  -*- lexical-binding: t ; eval: (view-mode 1) -*-
 
-;; THIS FILE HAS BEEN GENERATED.  see the literate source.
+;; THIS FILE HAS BEEN GENERATED.  For sustainable program-development
+;; edit the literate source file "org-pretty-tags.org".  Find also
+;; additional information there.  For experiments consider to disable
+;; { M-x view-mode RET } and to switch to { M-x emacs-lisp-mode RET }.
 
 ;; Copyright 2019 Marco Wahl
 ;; 
