@@ -464,7 +464,7 @@ Input is `org-pretty-tags-surrogate-images'."
       (outline-next-heading))
     (let ((surrogates (append org-pretty-tags-surrogate-strings org-pretty-tags-image-cache)))
       (while (not (eobp))
-        (assert (org-at-heading-p) "programm logic error.")
+        (cl-assert (org-at-heading-p) "program logic error.  please try to reproduce and fix or file a bug report.")
         (org-match-line org-complex-heading-regexp)
         (if (match-beginning 5)
             (let ((tags-end (match-end 5)))
