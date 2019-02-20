@@ -10,7 +10,7 @@
 ;; Author: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Created: [2019-01-06]
-;; Version: 0.1.1
+;; Version: 0.1.2
 ;; Package-Requires: ((emacs "25"))
 ;; Keywords: reading, outlines
 ;; URL: https://gitlab.com/marcowahl/org-pretty-tags
@@ -46,8 +46,30 @@
 ;;
 ;; See also the literate source file.  E.g. see https://gitlab.com/marcowahl/org-pretty-tags.
 
+;; Functionality
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :comments both
+;; :ID:       3b8dcfaf-b4df-4683-b5df-9a1a54208b3c
+;; :END:
+
+
+;; [[id:3b8dcfaf-b4df-4683-b5df-9a1a54208b3c][Functionality:1]]
 
 ;;; Code:
+;; Functionality:1 ends here
+
+;; requires
+;; :PROPERTIES:
+;; :ID:       44b48b71-90f0-47e8-89ce-53b49239b550
+;; :END:
+
+
+;; [[id:44b48b71-90f0-47e8-89ce-53b49239b550][requires:1]]
+
+(require 'org)
+(require 'subr-x) ; for `when-let'
+(require 'cl-macs) ; for `cl-assert'
+;; requires:1 ends here
 
 ;; container for the overlays
 ;; :PROPERTIES:
@@ -107,10 +129,23 @@
   :group 'org-pretty-tags)
 ;; list of image surrogates for plain ascii tags:1 ends here
 
+;; minor-mode lighter
+;; :PROPERTIES:
+;; :ID:       80867f2f-2497-4310-a172-4abd272af6f8
+;; :END:
+
+
+;; [[id:80867f2f-2497-4310-a172-4abd272af6f8][minor-mode lighter:1]]
+(defcustom org-pretty-tags-mode-lighter
+  " pretty tags"
+  "Text in the mode line to indicate that the mode is on."
+  :type 'string
+  :group 'org-pretty-tags)
+;; minor-mode lighter:1 ends here
+
 ;; cache for the images
 ;; :PROPERTIES:
 ;; :ID:       fb26c0bc-a69e-4cd2-8b5a-800682d24706
-;; :foo:      foo
 ;; :END:
 
 
@@ -175,7 +210,7 @@ Input is `org-pretty-tags-surrogate-images'."
       (outline-next-heading))
     (let ((surrogates (append org-pretty-tags-surrogate-strings org-pretty-tags-image-cache)))
       (while (not (eobp))
-        (assert (org-at-heading-p) "programm logic error.")
+        (cl-assert (org-at-heading-p) "program logic error.  please try to reproduce and fix or file a bug report.")
         (org-match-line org-complex-heading-regexp)
         (if (match-beginning 5)
             (let ((tags-end (match-end 5)))
@@ -216,7 +251,7 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
 ;;;###autoload
 (define-minor-mode org-pretty-tags-mode
   "Display surrogates for tags."
-  :lighter " pretty tags"
+  :lighter org-pretty-tags-mode-lighter
   :global t
   (cond
    (org-pretty-tags-mode
