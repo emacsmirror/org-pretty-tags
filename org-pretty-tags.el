@@ -1,4 +1,4 @@
-;;; org-pretty-tags.el --- Surrogates for tags  -*- lexical-binding: t -*-
+;;; org-pretty-tags.el --- Surrogates for tags  -*- lexical-binding: t ; eval: (view-mode 1) -*-
 
 ;; THIS FILE HAS BEEN GENERATED.  see the literate source.
 
