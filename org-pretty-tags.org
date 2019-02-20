@@ -305,9 +305,6 @@ Thanks.
 ;; <<description-define-surrogates>>
 ;;
 ;; See also the literate source file.  E.g. see https://gitlab.com/marcowahl/org-pretty-tags.
-
-
-;;; Code:
 #+end_src
 
 *** Functionality
@@ -315,6 +312,25 @@ Thanks.
 :header-args:emacs-lisp+: :comments both
 :ID:       3b8dcfaf-b4df-4683-b5df-9a1a54208b3c
 :END:
+
+#+begin_src emacs-lisp
+
+
+;;; Code:
+#+end_src
+
+**** requires
+:PROPERTIES:
+:ID:       44b48b71-90f0-47e8-89ce-53b49239b550
+:END:
+
+#+begin_src emacs-lisp
+
+
+(require 'org)
+(require 'subr-x) ; for `when-let'
+(require 'cl-macs) ; for `cl-assert'
+#+end_src
 
 **** container for the overlays
 :PROPERTIES:
