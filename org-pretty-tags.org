@@ -147,7 +147,24 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #+end_src
 
-** Files
+
+** About this Program
+
+This section gives some additional information about the program and
+might mainly be of interest for people who want to develop the program
+further.
+
+*** Literate Program
+
+=org-pretty-tags= is a literate program written in Org mode.  The
+emacs-lisp program =org-pretty-tags.el= is generated from the literate
+source =org-pretty-tags.org= by a step called tangle.
+
+{ M-x org-babel-tangle RET } in file =org-pretty-tags.org= triggers
+the tangle.  This generates file =org-pretty-tags.el= if this goes
+well.
+
+*** Files
 
 - org-pretty-tags.org ::  The literate source
 - readme.org :: Hardlink to the literate source file.
