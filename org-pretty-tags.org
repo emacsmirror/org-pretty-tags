@@ -504,7 +504,7 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
 ;;;###autoload
 (define-minor-mode org-pretty-tags-mode
   "Display surrogates for tags."
-  :lighter " pretty tags"
+  :lighter org-pretty-tags-mode-lighter
   :global t
   (cond
    (org-pretty-tags-mode
