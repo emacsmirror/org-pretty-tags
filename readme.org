@@ -107,7 +107,7 @@ will see.
 
 #+name: org-pretty-tags-version
 #+begin_src text
-0.1.1
+0.1.2
 #+end_src
 
 *** Typical Metadata
@@ -147,7 +147,24 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #+end_src
 
-** Files
+
+** About this Program
+
+This section gives some additional information about the program and
+might mainly be of interest for people who want to develop the program
+further.
+
+*** Literate Program
+
+=org-pretty-tags= is a literate program written in Org mode.  The
+emacs-lisp program =org-pretty-tags.el= is generated from the literate
+source =org-pretty-tags.org= by a step called tangle.
+
+{ M-x org-babel-tangle RET } in file =org-pretty-tags.org= triggers
+the tangle.  This generates file =org-pretty-tags.el= if this goes
+well.
+
+*** Files
 
 - org-pretty-tags.org ::  The literate source
 - readme.org :: Hardlink to the literate source file.
@@ -160,7 +177,99 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ** Tasks
 *** Open
-**** TODO Update the docu according to the reaction on melpa
+**** DONE +Update according to the first reaction on melpa+
+
+***** DONE +answer first reaction on melpa+
+
+see https://github.com/melpa/melpa/pull/6016.
+
+****** Checkdoc output:
+
+{ M-x checkdoc RET } gives me
+
+#+begin_src text
+Buffer comments and tags:  Not checked
+Documentation style:       Ok
+Message/Query text style:  Ok
+Unwanted Spaces:           Ok
+#+end_src
+
+Could you please point to the problematic sections?
+
+****** What are these comments all about?  They might confuse future contributors.
+
+#+begin_src emacs-lisp
+;; cache for the images
+;; :PROPERTIES:
+;; :ID:       fb26c0bc-a69e-4cd2-8b5a-800682d24706
+;; :foo:      foo
+;; :END:
+#+end_src
+
+
+The comment-line containing "foo" is trash, thanks for the catch.
+
+The comment-lines starting with ":PROPERTIES:" allow a connection to
+the actual source file.  Note that the org-pretty-tags program is
+actually a literate program.  The actual source is file
+"org-pretty-tags.org" (which is a copy of "readme.org" BTW.)
+
+I tried to make this more clear with the new section "About this
+Program" in the org-pretty-tags.org, better documentation in
+org-pretty-tags.el and setting org-pretty-tags.el to view-mode at
+load.
+
+****** Add `(require 'org)`
+
+Thanks.
+
+****** Add `(require 'subr-x)` for `when-let`
+
+Thanks.
+
+****** `assert` comes from `cl.el` which is deprecated - use cl-assert and `(require 'cl-macs)`
+
+Thanks.
+
+****** Why is the group `org-tags` and not `org-pretty-tags`?
+
+I find it appropriate to find the org-pretty-tags config stuff below
+the org-tags config stuff.
+
+****** Could you make the minor-mode lighter " pretty tags" customizable?
+
+Sure.  See org-pretty-tags-mode-lighter.
+
+****** `"programm logic error."` isn't very informative
+
+Okay.  I extended the text some.
+
+****** programm should be program
+
+Thanks.
+
+****** A couple comments on usage which may or may not be important:
+
+- If I'm editing an org buffer and I add a `:music:` tag, it doesn't
+  show up as musical notes until I toggle the mode off and
+  on. Intentional?
+
+  - With the current program structure it's too much CPU waste to get
+    the surrogates right for every possible change of the tags.  I
+    guess this could be done by hooking into every key-stroke event,
+    but I did not check this.  At least when you CHANGE a tag via C-c
+    C-c on a heading the tag surrogates get updated.
+
+  - See section "Hints" in file readme.org.
+
+- If I'm editing a tag that has been prettified (e.g. delete
+  characters off the end of `:imp:`) my edits don't show up until I
+  delete the whole tag.  There's probably a way to fix that.
+
+  - What do you think about using C-c C-c?
+
+***** DONE +increase version to 0.1.2+
+
 *** Closed
 **** DONE +Make sure only tags get the surrogate+
 
@@ -179,9 +288,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 :END:
 
 #+begin_src emacs-lisp :noweb yes
-;;; org-pretty-tags.el --- Surrogates for tags  -*- lexical-binding: t -*-
+;;; org-pretty-tags.el --- Surrogates for tags  -*- lexical-binding: t ; eval: (view-mode 1) -*-
 
-;; THIS FILE HAS BEEN GENERATED.  see the literate source.
+;; THIS FILE HAS BEEN GENERATED.  For sustainable program-development
+;; edit the literate source file "org-pretty-tags.org".  Find also
+;; additional information there.  For experiments consider to disable
+;; { M-x view-mode RET } and to switch to { M-x emacs-lisp-mode RET }.
 
 ;; <<copyright>>
 
@@ -193,9 +305,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;; <<description-define-surrogates>>
 ;;
 ;; See also the literate source file.  E.g. see https://gitlab.com/marcowahl/org-pretty-tags.
-
-
-;;; Code:
 #+end_src
 
 *** Functionality
@@ -203,6 +312,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 :header-args:emacs-lisp+: :comments both
 :ID:       3b8dcfaf-b4df-4683-b5df-9a1a54208b3c
 :END:
+
+#+begin_src emacs-lisp
+
+
+;;; Code:
+#+end_src
+
+**** requires
+:PROPERTIES:
+:ID:       44b48b71-90f0-47e8-89ce-53b49239b550
+:END:
+
+#+begin_src emacs-lisp
+
+
+(require 'org)
+(require 'subr-x) ; for `when-let'
+(require 'cl-macs) ; for `cl-assert'
+#+end_src
 
 **** container for the overlays
 :PROPERTIES:
@@ -258,10 +386,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   :group 'org-pretty-tags)
 #+end_src
 
+**** minor-mode lighter
+:PROPERTIES:
+:ID:       80867f2f-2497-4310-a172-4abd272af6f8
+:END:
+
+#+begin_src emacs-lisp
+(defcustom org-pretty-tags-mode-lighter
+  " pretty tags"
+  "Text in the mode line to indicate that the mode is on."
+  :type 'string
+  :group 'org-pretty-tags)
+#+end_src
+
 **** cache for the images
 :PROPERTIES:
 :ID:       fb26c0bc-a69e-4cd2-8b5a-800682d24706
-:foo:      foo
 :END:
 
 #+begin_src emacs-lisp
@@ -324,7 +464,7 @@ Input is `org-pretty-tags-surrogate-images'."
       (outline-next-heading))
     (let ((surrogates (append org-pretty-tags-surrogate-strings org-pretty-tags-image-cache)))
       (while (not (eobp))
-        (assert (org-at-heading-p) "programm logic error.")
+        (cl-assert (org-at-heading-p) "program logic error.  please try to reproduce and fix or file a bug report.")
         (org-match-line org-complex-heading-regexp)
         (if (match-beginning 5)
             (let ((tags-end (match-end 5)))
@@ -364,7 +504,7 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
 ;;;###autoload
 (define-minor-mode org-pretty-tags-mode
   "Display surrogates for tags."
-  :lighter " pretty tags"
+  :lighter org-pretty-tags-mode-lighter
   :global t
   (cond
    (org-pretty-tags-mode
