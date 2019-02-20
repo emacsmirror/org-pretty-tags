@@ -402,7 +402,6 @@ Thanks.
 **** cache for the images
 :PROPERTIES:
 :ID:       fb26c0bc-a69e-4cd2-8b5a-800682d24706
-:foo:      foo
 :END:
 
 #+begin_src emacs-lisp
