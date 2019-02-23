@@ -40,7 +40,7 @@ Notes:
 
 It's easy!
 
-*** Activate
+*** Activate/Deactivate
 
 #+name: description-activate-surrogates
 #+begin_src text
@@ -107,7 +107,7 @@ will see.
 
 #+name: org-pretty-tags-version
 #+begin_src text
-0.1.2
+0.1.3
 #+end_src
 
 *** Typical Metadata
