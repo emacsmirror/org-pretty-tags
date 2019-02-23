@@ -1,9 +1,8 @@
-;;; org-pretty-tags.el --- Surrogates for tags  -*- lexical-binding: t ; eval: (view-mode 1) -*-
+;;; org-pretty-tags.el --- Surrogates for tags  -*- lexical-binding: t -*-
 
 ;; THIS FILE HAS BEEN GENERATED.  For sustainable program-development
 ;; edit the literate source file "org-pretty-tags.org".  Find also
-;; additional information there.  For experiments consider to disable
-;; { M-x view-mode RET } and to switch to { M-x emacs-lisp-mode RET }.
+;; additional information there.
 
 ;; Copyright 2019 Marco Wahl
 ;; 
@@ -46,62 +45,22 @@
 ;;
 ;; See also the literate source file.  E.g. see https://gitlab.com/marcowahl/org-pretty-tags.
 
-;; Functionality
-;; :PROPERTIES:
-;; :header-args:emacs-lisp+: :comments both
-;; :ID:       3b8dcfaf-b4df-4683-b5df-9a1a54208b3c
-;; :END:
-
-
-;; [[id:3b8dcfaf-b4df-4683-b5df-9a1a54208b3c][Functionality:1]]
 
 ;;; Code:
-;; Functionality:1 ends here
 
-;; requires
-;; :PROPERTIES:
-;; :ID:       44b48b71-90f0-47e8-89ce-53b49239b550
-;; :END:
-
-
-;; [[id:44b48b71-90f0-47e8-89ce-53b49239b550][requires:1]]
 
 (require 'org)
 (require 'subr-x) ; for `when-let'
 (require 'cl-macs) ; for `cl-assert'
-;; requires:1 ends here
 
-;; container for the overlays
-;; :PROPERTIES:
-;; :ID:       cf2048b2-5f4e-4211-873d-9bce13c53f59
-;; :END:
-
-
-;; [[id:cf2048b2-5f4e-4211-873d-9bce13c53f59][container for the overlays:1]]
 (defvar org-pretty-tags-overlays nil
- "Container for the overlays of org-pretty-tags-mode.")
-;; container for the overlays:1 ends here
+ "Container for the overlays.")
 
-;; customize group
-;; :PROPERTIES:
-;; :ID:       bb36699d-67d2-4313-a74c-9ef3bb83b7d4
-;; :END:
-
-
-;; [[id:bb36699d-67d2-4313-a74c-9ef3bb83b7d4][customize group:1]]
 (defgroup org-pretty-tags nil
   "Options for Org Pretty Tags"
   ;; :tag "Org Pretty Tags"
   :group 'org-tags)
-;; customize group:1 ends here
 
-;; list of tags with symbols surrogates for plain ascii tags
-;; :PROPERTIES:
-;; :ID:       16c25206-73c2-422b-8948-979c415b75de
-;; :END:
-
-
-;; [[id:16c25206-73c2-422b-8948-979c415b75de][list of tags with symbols surrogates for plain ascii tags:1]]
 ;;;###autoload
 (defcustom org-pretty-tags-surrogate-strings
   '(("imp" . "☆") ; important stuff.
@@ -112,44 +71,20 @@
   "List of pretty replacements for tags."
   :type '(alist :key-type string :value-type string)
   :group 'org-pretty-tags)
-;; list of tags with symbols surrogates for plain ascii tags:1 ends here
 
-;; list of image surrogates for plain ascii tags
-;; :PROPERTIES:
-;; :ID:       cabb8307-a825-485d-9bf4-371d4020ef5b
-;; :END:
-
-
-;; [[id:cabb8307-a825-485d-9bf4-371d4020ef5b][list of image surrogates for plain ascii tags:1]]
 ;;;###autoload
 (defcustom org-pretty-tags-surrogate-images
   '()
   "List of pretty image replacements for tags."
   :type '(alist :key-type string :value-type string)
   :group 'org-pretty-tags)
-;; list of image surrogates for plain ascii tags:1 ends here
 
-;; minor-mode lighter
-;; :PROPERTIES:
-;; :ID:       80867f2f-2497-4310-a172-4abd272af6f8
-;; :END:
-
-
-;; [[id:80867f2f-2497-4310-a172-4abd272af6f8][minor-mode lighter:1]]
 (defcustom org-pretty-tags-mode-lighter
   " pretty tags"
   "Text in the mode line to indicate that the mode is on."
   :type 'string
   :group 'org-pretty-tags)
-;; minor-mode lighter:1 ends here
 
-;; cache for the images
-;; :PROPERTIES:
-;; :ID:       fb26c0bc-a69e-4cd2-8b5a-800682d24706
-;; :END:
-
-
-;; [[id:fb26c0bc-a69e-4cd2-8b5a-800682d24706][cache for the images:1]]
 (defun org-pretty-tags-image-cache ()
   "Return a map from tag to image.
 Input is `org-pretty-tags-surrogate-images'."
@@ -166,35 +101,25 @@ Input is `org-pretty-tags-surrogate-images'."
              (plist-put (cdr img) :type 'imagemagick)
              img)))
    org-pretty-tags-surrogate-images))
-;; cache for the images:1 ends here
 
-;; [[id:fb26c0bc-a69e-4cd2-8b5a-800682d24706][cache for the images:2]]
 (defvar org-pretty-tags-image-cache
   (org-pretty-tags-image-cache)
   "Cache for the image surrogates.")
-;; cache for the images:2 ends here
 
-;; [[id:fb26c0bc-a69e-4cd2-8b5a-800682d24706][cache for the images:3]]
 (defun org-pretty-tags-update-image-cache ()
-  "Update `org-pretty-tags-image-cache' from list `org-pretty-tags-surrogate-images'."
+  "Fill image-cache with surrogate images."
   (setq org-pretty-tags-image-cache (org-pretty-tags-image-cache)))
-;; cache for the images:3 ends here
 
-;; function to update the tag surrogates
-;; :PROPERTIES:
-;; :ID:       da436b9c-2eb6-4247-804c-20e18a626ac7
-;; :END:
-
-
-;; [[id:da436b9c-2eb6-4247-804c-20e18a626ac7][function to update the tag surrogates:1]]
 (defun org-pretty-tags-delete-overlays ()
+  "Delete all pretty tags overlays created."
   (while org-pretty-tags-overlays
     (delete-overlay (pop org-pretty-tags-overlays))))
 
+;; POTENTIAL: make sure only tags are changed.
 (defun org-pretty-tags-refresh-overlays-agenda ()
+  "Create pretty tags overlays for an org agenda buffer."
   (mapc (lambda (x)
           (org-with-point-at 1
-            ;; try: make sure only tags are changed.
             (progn
               (while (re-search-forward
                       (concat ":\\(" (car x) "\\):") nil t)
@@ -204,24 +129,31 @@ Input is `org-pretty-tags-surrogate-images'."
         (append org-pretty-tags-surrogate-strings org-pretty-tags-image-cache)))
 
 (defun org-pretty-tags-refresh-overlays-org-mode ()
-  (assert (derived-mode-p 'org-mode))
+  "Create the overlays for the tags for the headlines in the buffer."
   (org-with-point-at 1
     (unless (org-at-heading-p)
       (outline-next-heading))
-    (let ((surrogates (append org-pretty-tags-surrogate-strings org-pretty-tags-image-cache)))
+    (let ((surrogates (append org-pretty-tags-surrogate-strings
+                              org-pretty-tags-image-cache)))
       (while (not (eobp))
-        (cl-assert (org-at-heading-p) "program logic error.  please try to reproduce and fix or file a bug report.")
+        (cl-assert
+         (org-at-heading-p)
+         (concat "program logic error."
+                 "  please try to reproduce and fix or file a bug report."))
         (org-match-line org-complex-heading-regexp)
         (if (match-beginning 5)
             (let ((tags-end (match-end 5)))
               (goto-char (1+ (match-beginning 5)))
               (while (re-search-forward
                       (concat "\\(.+?\\):") tags-end t)
-                (when-let ((surrogate-cons (assoc (buffer-substring (match-beginning 1) (match-end 1))
+                (when-let ((surrogate-cons
+                            (assoc (buffer-substring (match-beginning 1)
+                                                     (match-end 1))
                                                   surrogates)))
                   (push (make-overlay (match-beginning 1) (match-end 1))
                         org-pretty-tags-overlays)
-                  (overlay-put (car org-pretty-tags-overlays) 'display (cdr surrogate-cons))))))
+                  (overlay-put (car org-pretty-tags-overlays)
+                               'display (cdr surrogate-cons))))))
         (outline-next-heading)))))
 
 (defun org-pretty-tags-refresh-overlays-buffer ()
@@ -231,7 +163,7 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
     (cond
      ((derived-mode-p 'org-agenda-mode) (org-pretty-tags-refresh-overlays-agenda))
      ((derived-mode-p 'org-mode) (org-pretty-tags-refresh-overlays-org-mode))
-     (t (error "function does not deal with the current context")))))
+     (t (error "Function does not deal with the current context")))))
 
 (defun org-pretty-tags-refresh-overlays-all-buffers ()
   "Overlay tags in all Org buffers."
@@ -239,15 +171,7 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
     (set-buffer buf)
     (when (derived-mode-p 'org-mode 'org-agenda-mode)
       (org-pretty-tags-refresh-overlays-buffer))))
-;; function to update the tag surrogates:1 ends here
 
-;; define the mode
-;; :PROPERTIES:
-;; :ID:       a3d9cc59-89aa-4165-a844-90da8531b46f
-;; :END:
-
-
-;; [[id:a3d9cc59-89aa-4165-a844-90da8531b46f][define the mode:1]]
 ;;;###autoload
 (define-minor-mode org-pretty-tags-mode
   "Display surrogates for tags."
@@ -266,7 +190,6 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
     (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-buffer)
     (remove-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays-buffer)
     (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays-buffer))))
-;; define the mode:1 ends here
 
 
 (provide 'org-pretty-tags)
