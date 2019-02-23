@@ -147,7 +147,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #+end_src
 
-
 ** About this Program
 
 This section gives some additional information about the program and
@@ -160,9 +159,31 @@ further.
 emacs-lisp program =org-pretty-tags.el= is generated from the literate
 source =org-pretty-tags.org= by a step called tangle.
 
+**** Tangle
+
 { M-x org-babel-tangle RET } in file =org-pretty-tags.org= triggers
 the tangle.  This generates file =org-pretty-tags.el= if this goes
 well.
+
+**** Detangle
+
+Recall to use the property line
+
+#+begin_src text
+:header-args:emacs-lisp+: :comments both
+#+end_src
+
+to create tangle-info in the tangled file.  The additional info can be
+used with function org-babel-detangle.  Detangle means to edit the
+tangled file and bring these changes to the literate source file.
+
+It's recommended to use this line in section [[Functionality]] during
+development of the package.
+
+*** Create the Emacs Package file
+
+Make sure not to tangle the extra information for automatic detangle.
+See section [[Detangle]].
 
 *** Files
 
@@ -174,6 +195,10 @@ well.
 - data :: Artefacts.  E.g. images for documentation.
 - *.el :: Elisp source files.
   - Note: these files are derived from the literate source.
+
+*** Contact
+
+Send feedback, wishes, bug reports, etc. to marcowahlsoft@gmail.com.
 
 ** Tasks
 *** Open
@@ -215,9 +240,8 @@ actually a literate program.  The actual source is file
 "org-pretty-tags.org" (which is a copy of "readme.org" BTW.)
 
 I tried to make this more clear with the new section "About this
-Program" in the org-pretty-tags.org, better documentation in
-org-pretty-tags.el and setting org-pretty-tags.el to view-mode at
-load.
+Program" in the org-pretty-tags.org and better documentation in
+org-pretty-tags.el.
 
 ****** Add `(require 'org)`
 
@@ -277,7 +301,7 @@ Thanks.
 
 * Code
 
-** Functionality
+** Package
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle org-pretty-tags.el
 :END:
@@ -288,12 +312,11 @@ Thanks.
 :END:
 
 #+begin_src emacs-lisp :noweb yes
-;;; org-pretty-tags.el --- Surrogates for tags  -*- lexical-binding: t ; eval: (view-mode 1) -*-
+;;; org-pretty-tags.el --- Surrogates for tags  -*- lexical-binding: t -*-
 
 ;; THIS FILE HAS BEEN GENERATED.  For sustainable program-development
 ;; edit the literate source file "org-pretty-tags.org".  Find also
-;; additional information there.  For experiments consider to disable
-;; { M-x view-mode RET } and to switch to { M-x emacs-lisp-mode RET }.
+;; additional information there.
 
 ;; <<copyright>>
 
@@ -309,12 +332,16 @@ Thanks.
 
 *** Functionality
 :PROPERTIES:
-:header-args:emacs-lisp+: :comments both
+:header-args:emacs-lisp+: :comments no
 :ID:       3b8dcfaf-b4df-4683-b5df-9a1a54208b3c
 :END:
 
-#+begin_src emacs-lisp
+**** code section header
+:PROPERTIES:
+:ID:       12bb6a92-216b-4320-a1b5-ef7061836764
+:END:
 
+#+begin_src emacs-lisp
 
 ;;; Code:
 #+end_src
@@ -325,7 +352,6 @@ Thanks.
 :END:
 
 #+begin_src emacs-lisp
-
 
 (require 'org)
 (require 'subr-x) ; for `when-let'
@@ -339,7 +365,7 @@ Thanks.
 
 #+begin_src emacs-lisp
 (defvar org-pretty-tags-overlays nil
- "Container for the overlays of org-pretty-tags-mode.")
+ "Container for the overlays.")
 #+end_src
 
 **** customize group
@@ -431,7 +457,7 @@ Input is `org-pretty-tags-surrogate-images'."
 
 #+begin_src emacs-lisp
 (defun org-pretty-tags-update-image-cache ()
-  "Update `org-pretty-tags-image-cache' from list `org-pretty-tags-surrogate-images'."
+  "Fill image-cache with surrogate images."
   (setq org-pretty-tags-image-cache (org-pretty-tags-image-cache)))
 #+end_src
 
@@ -442,13 +468,15 @@ Input is `org-pretty-tags-surrogate-images'."
 
 #+begin_src emacs-lisp
 (defun org-pretty-tags-delete-overlays ()
+  "Delete all pretty tags overlays created."
   (while org-pretty-tags-overlays
     (delete-overlay (pop org-pretty-tags-overlays))))
 
+;; POTENTIAL: make sure only tags are changed.
 (defun org-pretty-tags-refresh-overlays-agenda ()
+  "Create pretty tags overlays for an org agenda buffer."
   (mapc (lambda (x)
           (org-with-point-at 1
-            ;; try: make sure only tags are changed.
             (progn
               (while (re-search-forward
                       (concat ":\\(" (car x) "\\):") nil t)
@@ -458,24 +486,31 @@ Input is `org-pretty-tags-surrogate-images'."
         (append org-pretty-tags-surrogate-strings org-pretty-tags-image-cache)))
 
 (defun org-pretty-tags-refresh-overlays-org-mode ()
-  (assert (derived-mode-p 'org-mode))
+  "Create the overlays for the tags for the headlines in the buffer."
   (org-with-point-at 1
     (unless (org-at-heading-p)
       (outline-next-heading))
-    (let ((surrogates (append org-pretty-tags-surrogate-strings org-pretty-tags-image-cache)))
+    (let ((surrogates (append org-pretty-tags-surrogate-strings
+                              org-pretty-tags-image-cache)))
       (while (not (eobp))
-        (cl-assert (org-at-heading-p) "program logic error.  please try to reproduce and fix or file a bug report.")
+        (cl-assert
+         (org-at-heading-p)
+         (concat "program logic error."
+                 "  please try to reproduce and fix or file a bug report."))
         (org-match-line org-complex-heading-regexp)
         (if (match-beginning 5)
             (let ((tags-end (match-end 5)))
               (goto-char (1+ (match-beginning 5)))
               (while (re-search-forward
                       (concat "\\(.+?\\):") tags-end t)
-                (when-let ((surrogate-cons (assoc (buffer-substring (match-beginning 1) (match-end 1))
+                (when-let ((surrogate-cons
+                            (assoc (buffer-substring (match-beginning 1)
+                                                     (match-end 1))
                                                   surrogates)))
                   (push (make-overlay (match-beginning 1) (match-end 1))
                         org-pretty-tags-overlays)
-                  (overlay-put (car org-pretty-tags-overlays) 'display (cdr surrogate-cons))))))
+                  (overlay-put (car org-pretty-tags-overlays)
+                               'display (cdr surrogate-cons))))))
         (outline-next-heading)))))
 
 (defun org-pretty-tags-refresh-overlays-buffer ()
@@ -485,7 +520,7 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
     (cond
      ((derived-mode-p 'org-agenda-mode) (org-pretty-tags-refresh-overlays-agenda))
      ((derived-mode-p 'org-mode) (org-pretty-tags-refresh-overlays-org-mode))
-     (t (error "function does not deal with the current context")))))
+     (t (error "Function does not deal with the current context")))))
 
 (defun org-pretty-tags-refresh-overlays-all-buffers ()
   "Overlay tags in all Org buffers."
