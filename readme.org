@@ -70,13 +70,15 @@ org icon>".
 
 - The mode is not able to update the tag surrogates for every scenario.
 
-- If the tag surrogates should be in place but are not then turn
+- If the tag surrogates don't show up normally then try "reset" with
+  {C-u M-x org-pretty-tags-mode RET}. Note the C-u.  Or turn
   org-pretty-tags-mode off and on again.  E.g. two times ={M-x
   org-pretty-tags-mode RET}=.
 
 - If tag surrogates do not go away then save that file, kill the
   buffer and reload the file.  org-pretty-tags-mode should act normal
-  again.
+  again.  Recall: the pretty tags are decoration and derived from the
+  text.
 
 - Take care about the text hidden under the surrogates which can still be modified.
   - To see the effect enable org-pretty-tags-mode.
@@ -418,6 +420,7 @@ Thanks.
 :END:
 
 #+begin_src emacs-lisp
+;;;###autoload
 (defcustom org-pretty-tags-mode-lighter
   " pretty tags"
   "Text in the mode line to indicate that the mode is on."

@@ -79,6 +79,7 @@
   :type '(alist :key-type string :value-type string)
   :group 'org-pretty-tags)
 
+;;;###autoload
 (defcustom org-pretty-tags-mode-lighter
   " pretty tags"
   "Text in the mode line to indicate that the mode is on."
