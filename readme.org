@@ -344,7 +344,7 @@ Thanks.
 :END:
 
 #+begin_src emacs-lisp
-
+
 ;;; Code:
 #+end_src
 
@@ -360,17 +360,17 @@ Thanks.
 (require 'cl-macs) ; for `cl-assert'
 #+end_src
 
-**** container for the overlays
+**** customize
 :PROPERTIES:
-:ID:       cf2048b2-5f4e-4211-873d-9bce13c53f59
+:ID:       d38324a5-e37f-4da5-bdd3-223ad1c3382e
 :END:
 
 #+begin_src emacs-lisp
-(defvar org-pretty-tags-overlays nil
- "Container for the overlays.")
+
+;; customizable items
 #+end_src
 
-**** customize group
+***** customize group
 :PROPERTIES:
 :ID:       bb36699d-67d2-4313-a74c-9ef3bb83b7d4
 :END:
@@ -382,7 +382,7 @@ Thanks.
   :group 'org-tags)
 #+end_src
 
-**** list of tags with symbols surrogates for plain ascii tags
+***** list of tags with symbols surrogates for plain ascii tags
 :PROPERTIES:
 :ID:       16c25206-73c2-422b-8948-979c415b75de
 :END:
@@ -400,7 +400,7 @@ Thanks.
   :group 'org-pretty-tags)
 #+end_src
 
-**** list of image surrogates for plain ascii tags
+***** list of image surrogates for plain ascii tags
 :PROPERTIES:
 :ID:       cabb8307-a825-485d-9bf4-371d4020ef5b
 :END:
@@ -414,7 +414,7 @@ Thanks.
   :group 'org-pretty-tags)
 #+end_src
 
-**** minor-mode lighter
+***** minor-mode lighter
 :PROPERTIES:
 :ID:       80867f2f-2497-4310-a172-4abd272af6f8
 :END:
@@ -428,12 +428,48 @@ Thanks.
   :group 'org-pretty-tags)
 #+end_src
 
+**** variables
+:PROPERTIES:
+:ID:       4087317b-4e36-4fdf-8640-2de44f30a218
+:END:
+
+#+begin_src emacs-lisp
+
+;; global variables
+#+end_src
+
+***** container for the overlays
+:PROPERTIES:
+:ID:       cf2048b2-5f4e-4211-873d-9bce13c53f59
+:END:
+
+#+begin_src emacs-lisp
+(defvar org-pretty-tags-overlays nil
+ "Container for the overlays.")
+#+end_src
+
+***** cache for the image surrogates
+:PROPERTIES:
+:ID:       1ca4a732-5e28-4516-909d-11ac8ac5b72e
+:END:
+
+This is supposed to be an alist.
+
+#+begin_src emacs-lisp
+(defvar org-pretty-tags-image-cache
+  (org-pretty-tags-image-cache)
+  "Cache for the image surrogates.")
+#+end_src
+
 **** cache for the images
 :PROPERTIES:
 :ID:       fb26c0bc-a69e-4cd2-8b5a-800682d24706
 :END:
 
 #+begin_src emacs-lisp
+
+;; cache for the images
+
 (defun org-pretty-tags-image-cache ()
   "Return a map from tag to image.
 Input is `org-pretty-tags-surrogate-images'."
@@ -450,26 +486,21 @@ Input is `org-pretty-tags-surrogate-images'."
              (plist-put (cdr img) :type 'imagemagick)
              img)))
    org-pretty-tags-surrogate-images))
-#+end_src
 
-#+begin_src emacs-lisp
-(defvar org-pretty-tags-image-cache
-  (org-pretty-tags-image-cache)
-  "Cache for the image surrogates.")
-#+end_src
-
-#+begin_src emacs-lisp
 (defun org-pretty-tags-update-image-cache ()
   "Fill image-cache with surrogate images."
   (setq org-pretty-tags-image-cache (org-pretty-tags-image-cache)))
 #+end_src
 
-**** function to update the tag surrogates
+**** functions to update the tag surrogates
 :PROPERTIES:
 :ID:       da436b9c-2eb6-4247-804c-20e18a626ac7
 :END:
 
 #+begin_src emacs-lisp
+
+;; create/delete overlays
+
 (defun org-pretty-tags-delete-overlays ()
   "Delete all pretty tags overlays created."
   (while org-pretty-tags-overlays
@@ -539,6 +570,9 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
 :END:
 
 #+begin_src emacs-lisp
+
+;; mode definition
+
 ;;;###autoload
 (define-minor-mode org-pretty-tags-mode
   "Display surrogates for tags."

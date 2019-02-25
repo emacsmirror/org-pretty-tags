@@ -45,7 +45,6 @@
 ;;
 ;; See also the literate source file.  E.g. see https://gitlab.com/marcowahl/org-pretty-tags.
 
-
 ;;; Code:
 
 
@@ -53,8 +52,8 @@
 (require 'subr-x) ; for `when-let'
 (require 'cl-macs) ; for `cl-assert'
 
-(defvar org-pretty-tags-overlays nil
- "Container for the overlays.")
+
+;; customizable items
 
 (defgroup org-pretty-tags nil
   "Options for Org Pretty Tags"
@@ -86,6 +85,19 @@
   :type 'string
   :group 'org-pretty-tags)
 
+
+;; global variables
+
+(defvar org-pretty-tags-overlays nil
+ "Container for the overlays.")
+
+(defvar org-pretty-tags-image-cache
+  (org-pretty-tags-image-cache)
+  "Cache for the image surrogates.")
+
+
+;; cache for the images
+
 (defun org-pretty-tags-image-cache ()
   "Return a map from tag to image.
 Input is `org-pretty-tags-surrogate-images'."
@@ -103,13 +115,12 @@ Input is `org-pretty-tags-surrogate-images'."
              img)))
    org-pretty-tags-surrogate-images))
 
-(defvar org-pretty-tags-image-cache
-  (org-pretty-tags-image-cache)
-  "Cache for the image surrogates.")
-
 (defun org-pretty-tags-update-image-cache ()
   "Fill image-cache with surrogate images."
   (setq org-pretty-tags-image-cache (org-pretty-tags-image-cache)))
+
+
+;; create/delete overlays
 
 (defun org-pretty-tags-delete-overlays ()
   "Delete all pretty tags overlays created."
@@ -172,6 +183,9 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
     (set-buffer buf)
     (when (derived-mode-p 'org-mode 'org-agenda-mode)
       (org-pretty-tags-refresh-overlays-buffer))))
+
+
+;; mode definition
 
 ;;;###autoload
 (define-minor-mode org-pretty-tags-mode
