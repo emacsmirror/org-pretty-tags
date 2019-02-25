@@ -448,19 +448,6 @@ Thanks.
  "Container for the overlays.")
 #+end_src
 
-***** cache for the image surrogates
-:PROPERTIES:
-:ID:       1ca4a732-5e28-4516-909d-11ac8ac5b72e
-:END:
-
-This is supposed to be an alist.
-
-#+begin_src emacs-lisp
-(defvar org-pretty-tags-image-cache
-  (org-pretty-tags-image-cache)
-  "Cache for the image surrogates.")
-#+end_src
-
 **** cache for the images
 :PROPERTIES:
 :ID:       fb26c0bc-a69e-4cd2-8b5a-800682d24706
@@ -490,6 +477,17 @@ Input is `org-pretty-tags-surrogate-images'."
 (defun org-pretty-tags-update-image-cache ()
   "Fill image-cache with surrogate images."
   (setq org-pretty-tags-image-cache (org-pretty-tags-image-cache)))
+#+end_src
+
+***** cache for the image surrogates
+:PROPERTIES:
+:ID:       1ca4a732-5e28-4516-909d-11ac8ac5b72e
+:END:
+
+#+begin_src emacs-lisp
+(defvar org-pretty-tags-image-cache
+  (org-pretty-tags-image-cache)
+  "Cache for the image surrogates.")
 #+end_src
 
 **** functions to update the tag surrogates
