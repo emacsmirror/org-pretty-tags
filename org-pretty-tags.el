@@ -91,10 +91,6 @@
 (defvar org-pretty-tags-overlays nil
  "Container for the overlays.")
 
-(defvar org-pretty-tags-image-cache
-  (org-pretty-tags-image-cache)
-  "Cache for the image surrogates.")
-
 
 ;; cache for the images
 
@@ -118,6 +114,10 @@ Input is `org-pretty-tags-surrogate-images'."
 (defun org-pretty-tags-update-image-cache ()
   "Fill image-cache with surrogate images."
   (setq org-pretty-tags-image-cache (org-pretty-tags-image-cache)))
+
+(defvar org-pretty-tags-image-cache
+  (org-pretty-tags-image-cache)
+  "Cache for the image surrogates.")
 
 
 ;; create/delete overlays

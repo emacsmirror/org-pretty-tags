@@ -35,11 +35,11 @@
 ;; :END:
 
 
-;; [[id:dac141b6-e0a8-4312-8022-90b08fce4c84][Tests:1]]
+;; [[file:~/p/elisp/mw/org-pretty-tags/org-pretty-tags.org::*Tests][Tests:1]]
 (require 'org-pretty-tags)
 ;; Tests:1 ends here
 
-;; [[id:dac141b6-e0a8-4312-8022-90b08fce4c84][Tests:2]]
+;; [[file:~/p/elisp/mw/org-pretty-tags/org-pretty-tags.org::*Tests][Tests:2]]
 (ert-deftest test-org-pretty-tags-1 ()
   "a glyph overlays a tag."
   (with-temp-buffer
