@@ -199,7 +199,8 @@ See section [[Detangle]].
 
 *** Contact
 
-Send feedback, wishes, bug reports, etc. to marcowahlsoft@gmail.com.
+Contribute or send feedback, wishes, bug reports, etc. to
+marcowahlsoft@gmail.com.
 
 ** Tasks
 *** Open
