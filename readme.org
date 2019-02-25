@@ -72,8 +72,7 @@ org icon>".
 
 - If the tag surrogates don't show up normally then try "reset" with
   {C-u M-x org-pretty-tags-mode RET}. Note the C-u.  Or turn
-  org-pretty-tags-mode off and on again.  E.g. two times ={M-x
-  org-pretty-tags-mode RET}=.
+  org-pretty-tags-mode off and on again.  E.g. two times ={M-x org-pretty-tags-mode RET}=.
 
 - If tag surrogates do not go away then save that file, kill the
   buffer and reload the file.  org-pretty-tags-mode should act normal
