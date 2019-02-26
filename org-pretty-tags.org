@@ -174,6 +174,12 @@ Recall to use the property line
 :header-args:emacs-lisp+: :comments both
 #+end_src
 
+instead of
+
+#+begin_src text
+:header-args:emacs-lisp+: :comments no
+#+end_src
+
 to create tangle-info in the tangled file.  The additional info can be
 used with function org-babel-detangle.  Detangle means to edit the
 tangled file and bring these changes to the literate source file.
@@ -457,7 +463,7 @@ Thanks.
 
 ;; cache for the images
 
-(defun org-pretty-tags-image-cache (tags-and-filenames)
+(defun org-pretty-tags-image-specs (tags-and-filenames)
   "Return an alist with tag and Emacs image spec.
 PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
   (mapcar
@@ -499,7 +505,7 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
                       org-pretty-tags-overlays)
                 (overlay-put (car org-pretty-tags-overlays) 'display (cdr x))))))
         (append org-pretty-tags-surrogate-strings
-                (org-pretty-tags-image-cache org-pretty-tags-surrogate-images))))
+                (org-pretty-tags-image-specs org-pretty-tags-surrogate-images))))
 
 (defun org-pretty-tags-refresh-overlays-org-mode ()
   "Create the overlays for the tags for the headlines in the buffer."
@@ -507,7 +513,7 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
     (unless (org-at-heading-p)
       (outline-next-heading))
     (let ((surrogates (append org-pretty-tags-surrogate-strings
-                              (org-pretty-tags-image-cache org-pretty-tags-surrogate-images))))
+                              (org-pretty-tags-image-specs org-pretty-tags-surrogate-images))))
       (while (not (eobp))
         (cl-assert
          (org-at-heading-p)
@@ -562,7 +568,7 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
   :global t
   (cond
    (org-pretty-tags-mode
-    (org-pretty-tags-image-cache org-pretty-tags-surrogate-images)
+    (org-pretty-tags-image-specs org-pretty-tags-surrogate-images)
     (org-pretty-tags-delete-overlays)
     (org-pretty-tags-refresh-overlays-all-buffers)
     (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-buffer)
