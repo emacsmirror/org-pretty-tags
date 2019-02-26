@@ -358,6 +358,7 @@ this subtree.
 :END:
 
 #+begin_src emacs-lisp
+
 ;;; Code:
 #+end_src
 
@@ -468,6 +469,8 @@ this subtree.
 
 #+begin_src emacs-lisp
 
+;; get image specifications
+
 (defun org-pretty-tags-image-specs (tags-and-filenames)
   "Return an alist with tag and Emacs image spec.
 PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
