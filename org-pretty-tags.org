@@ -344,13 +344,20 @@ Thanks.
 :ID:       3b8dcfaf-b4df-4683-b5df-9a1a54208b3c
 :END:
 
+:meta:
+Recall the lines for the properties to control some of the tangle for
+this subtree.
+
+# :header-args:emacs-lisp+: :comments no
+# :header-args:emacs-lisp+: :comments both
+:END:
+
 **** code section header
 :PROPERTIES:
 :ID:       12bb6a92-216b-4320-a1b5-ef7061836764
 :END:
 
 #+begin_src emacs-lisp
-
 ;;; Code:
 #+end_src
 
