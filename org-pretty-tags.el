@@ -45,6 +45,7 @@
 ;;
 ;; See also the literate source file.  E.g. see https://gitlab.com/marcowahl/org-pretty-tags.
 
+
 ;;; Code:
 
 
@@ -92,6 +93,8 @@
  "Container for the overlays.")
 
 
+;; get image specifications
+
 (defun org-pretty-tags-image-specs (tags-and-filenames)
   "Return an alist with tag and Emacs image spec.
 PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
@@ -181,16 +184,14 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
   "Display surrogates for tags."
   :lighter org-pretty-tags-mode-lighter
   :global t
+  (org-pretty-tags-delete-overlays)
   (cond
    (org-pretty-tags-mode
-    (org-pretty-tags-image-specs org-pretty-tags-surrogate-images)
-    (org-pretty-tags-delete-overlays)
     (org-pretty-tags-refresh-overlays-all-buffers)
     (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-buffer)
     (add-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays-buffer)
     (add-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays-buffer))
    (t
-    (org-pretty-tags-delete-overlays)
     (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-buffer)
     (remove-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays-buffer)
     (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays-buffer))))
