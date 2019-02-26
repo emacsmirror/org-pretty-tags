@@ -94,30 +94,20 @@
 
 ;; cache for the images
 
-(defun org-pretty-tags-image-cache ()
-  "Return a map from tag to image.
-Input is `org-pretty-tags-surrogate-images'."
+(defun org-pretty-tags-image-cache (tags-and-filenames)
+  "Return an alist with tag and Emacs image spec.
+PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
   (mapcar
    (lambda (x)
      (cons (car x)
-           (let* ((px-subtract-from-image-height 5)
-                  (img
-                   (create-image
-                    (cdr x)
-                    nil nil
-                    :height (- (window-font-height) px-subtract-from-image-height)
-                    :ascent 'center)))
-             (plist-put (cdr img) :type 'imagemagick)
-             img)))
-   org-pretty-tags-surrogate-images))
-
-(defun org-pretty-tags-update-image-cache ()
-  "Fill image-cache with surrogate images."
-  (setq org-pretty-tags-image-cache (org-pretty-tags-image-cache)))
-
-(defvar org-pretty-tags-image-cache
-  (org-pretty-tags-image-cache)
-  "Cache for the image surrogates.")
+           (let ((px-subtract-from-image-height 5))
+             (create-image
+              (cdr x)
+              'imagemagick nil
+              :height (- (window-font-height)
+                         px-subtract-from-image-height)
+              :ascent 'center))))
+   tags-and-filenames))
 
 
 ;; create/delete overlays
@@ -138,7 +128,8 @@ Input is `org-pretty-tags-surrogate-images'."
                 (push (make-overlay (match-beginning 1) (match-end 1))
                       org-pretty-tags-overlays)
                 (overlay-put (car org-pretty-tags-overlays) 'display (cdr x))))))
-        (append org-pretty-tags-surrogate-strings org-pretty-tags-image-cache)))
+        (append org-pretty-tags-surrogate-strings
+                (org-pretty-tags-image-cache org-pretty-tags-surrogate-images))))
 
 (defun org-pretty-tags-refresh-overlays-org-mode ()
   "Create the overlays for the tags for the headlines in the buffer."
@@ -146,7 +137,7 @@ Input is `org-pretty-tags-surrogate-images'."
     (unless (org-at-heading-p)
       (outline-next-heading))
     (let ((surrogates (append org-pretty-tags-surrogate-strings
-                              org-pretty-tags-image-cache)))
+                              (org-pretty-tags-image-cache org-pretty-tags-surrogate-images))))
       (while (not (eobp))
         (cl-assert
          (org-at-heading-p)
@@ -194,7 +185,7 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
   :global t
   (cond
    (org-pretty-tags-mode
-    (org-pretty-tags-update-image-cache)
+    (org-pretty-tags-image-cache org-pretty-tags-surrogate-images)
     (org-pretty-tags-delete-overlays)
     (org-pretty-tags-refresh-overlays-all-buffers)
     (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-buffer)
