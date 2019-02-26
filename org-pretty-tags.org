@@ -463,16 +463,14 @@ Input is `org-pretty-tags-surrogate-images'."
   (mapcar
    (lambda (x)
      (cons (car x)
-           (let* ((px-subtract-from-image-height 5)
-                  (img
-                   (create-image
-                    (cdr x)
-                    nil nil
-                    :height (- (window-font-height) px-subtract-from-image-height)
-                    :ascent 'center)))
-             (plist-put (cdr img) :type 'imagemagick)
-             img)))
    org-pretty-tags-surrogate-images))
+           (let ((px-subtract-from-image-height 5))
+             (create-image
+              (cdr x)
+              'imagemagick nil
+              :height (- (window-font-height)
+                         px-subtract-from-image-height)
+              :ascent 'center))))
 
 (defun org-pretty-tags-update-image-cache ()
   "Fill image-cache with surrogate images."
