@@ -457,13 +457,12 @@ Thanks.
 
 ;; cache for the images
 
-(defun org-pretty-tags-image-cache ()
-  "Return a map from tag to image.
-Input is `org-pretty-tags-surrogate-images'."
+(defun org-pretty-tags-image-cache (tags-and-filenames)
+  "Return an alist with tag and Emacs image spec.
+PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
   (mapcar
    (lambda (x)
      (cons (car x)
-   org-pretty-tags-surrogate-images))
            (let ((px-subtract-from-image-height 5))
              (create-image
               (cdr x)
@@ -471,10 +470,12 @@ Input is `org-pretty-tags-surrogate-images'."
               :height (- (window-font-height)
                          px-subtract-from-image-height)
               :ascent 'center))))
+   tags-and-filenames))
 
 (defun org-pretty-tags-update-image-cache ()
   "Fill image-cache with surrogate images."
-  (setq org-pretty-tags-image-cache (org-pretty-tags-image-cache)))
+  (setq org-pretty-tags-image-cache
+        (org-pretty-tags-image-cache org-pretty-tags-surrogate-images)))
 #+end_src
 
 ***** cache for the image surrogates
@@ -484,7 +485,7 @@ Input is `org-pretty-tags-surrogate-images'."
 
 #+begin_src emacs-lisp
 (defvar org-pretty-tags-image-cache
-  (org-pretty-tags-image-cache)
+  (org-pretty-tags-image-cache org-pretty-tags-surrogate-images)
   "Cache for the image surrogates.")
 #+end_src
 
