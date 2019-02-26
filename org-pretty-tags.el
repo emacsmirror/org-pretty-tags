@@ -92,9 +92,7 @@
  "Container for the overlays.")
 
 
-;; cache for the images
-
-(defun org-pretty-tags-image-cache (tags-and-filenames)
+(defun org-pretty-tags-image-specs (tags-and-filenames)
   "Return an alist with tag and Emacs image spec.
 PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
   (mapcar
@@ -129,7 +127,7 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
                       org-pretty-tags-overlays)
                 (overlay-put (car org-pretty-tags-overlays) 'display (cdr x))))))
         (append org-pretty-tags-surrogate-strings
-                (org-pretty-tags-image-cache org-pretty-tags-surrogate-images))))
+                (org-pretty-tags-image-specs org-pretty-tags-surrogate-images))))
 
 (defun org-pretty-tags-refresh-overlays-org-mode ()
   "Create the overlays for the tags for the headlines in the buffer."
@@ -137,7 +135,7 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
     (unless (org-at-heading-p)
       (outline-next-heading))
     (let ((surrogates (append org-pretty-tags-surrogate-strings
-                              (org-pretty-tags-image-cache org-pretty-tags-surrogate-images))))
+                              (org-pretty-tags-image-specs org-pretty-tags-surrogate-images))))
       (while (not (eobp))
         (cl-assert
          (org-at-heading-p)
@@ -185,7 +183,7 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
   :global t
   (cond
    (org-pretty-tags-mode
-    (org-pretty-tags-image-cache org-pretty-tags-surrogate-images)
+    (org-pretty-tags-image-specs org-pretty-tags-surrogate-images)
     (org-pretty-tags-delete-overlays)
     (org-pretty-tags-refresh-overlays-all-buffers)
     (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-buffer)
