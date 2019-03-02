@@ -436,7 +436,7 @@ this subtree.
 #+begin_src emacs-lisp
 ;;;###autoload
 (defcustom org-pretty-tags-mode-lighter
-  " pretty tags"
+  " pretty-tags"
   "Text in the mode line to indicate that the mode is on."
   :type 'string
   :group 'org-pretty-tags)
