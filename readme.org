@@ -615,7 +615,7 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
   (ert-delete-all-tests)
   (push apath load-path)
   (load "org-pretty-tags.el")
-  (load "test-org-pretty-tags.el")
+  (load "org-pretty-tags-test.el")
   (ert t)
   (setq load-path (remove apath load-path))
   (run-with-timer 1 nil (lambda () (switch-to-buffer-other-window "*ert*"))))
@@ -623,7 +623,7 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
 
 *** Unittests
 :PROPERTIES:
-:header-args:emacs-lisp: :tangle test-org-pretty-tags.el
+:header-args:emacs-lisp: :tangle org-pretty-tags-test.el
 :END:
 
 **** First lines
@@ -632,7 +632,7 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
 :END:
 
 #+begin_src emacs-lisp :padline no :noweb yes
-;;; test-org-pretty-tags.el --- tests  -*- lexical-binding: t -*-
+;;; org-pretty-tags-test.el --- tests  -*- lexical-binding: t -*-
 
 
 ;; THIS FILE HAS BEEN GENERATED.  see the literate source.
@@ -683,7 +683,7 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
 
 #+begin_src emacs-lisp
 
-(provide 'test-org-pretty-tags)
+(provide 'org-pretty-tags-test)
 
-;;; test-org-pretty-tags.el ends here
+;;; org-pretty-tags-test.el ends here
 #+end_src
