@@ -1,4 +1,4 @@
-;;; test-org-pretty-tags.el --- tests  -*- lexical-binding: t -*-
+;;; org-pretty-tags-test.el --- tests  -*- lexical-binding: t -*-
 
 
 ;; THIS FILE HAS BEEN GENERATED.  see the literate source.
@@ -64,6 +64,6 @@
 ;; Tests:2 ends here
 
 
-(provide 'test-org-pretty-tags)
+(provide 'org-pretty-tags-test)
 
-;;; test-org-pretty-tags.el ends here
+;;; org-pretty-tags-test.el ends here
