@@ -51,7 +51,7 @@
 
 (require 'org)
 (require 'subr-x) ; for `when-let'
-(require 'cl-macs) ; for `cl-assert'
+(require 'cl-lib) ; for `cl-assert'
 
 
 ;; customizable items
@@ -81,7 +81,7 @@
 
 ;;;###autoload
 (defcustom org-pretty-tags-mode-lighter
-  " pretty tags"
+  " pretty-tags"
   "Text in the mode line to indicate that the mode is on."
   :type 'string
   :group 'org-pretty-tags)
