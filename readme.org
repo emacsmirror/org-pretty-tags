@@ -626,6 +626,9 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
 :header-args:emacs-lisp: :tangle org-pretty-tags-test.el
 :END:
 
+Note: the name with suffix =-test= has a meaning for melpa: the file does
+not get included in the package.
+
 **** First lines
 :PROPERTIES:
 :ID:       0afc357c-dbc7-447b-8123-8b725e9c6e7d
