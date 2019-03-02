@@ -371,7 +371,7 @@ this subtree.
 
 (require 'org)
 (require 'subr-x) ; for `when-let'
-(require 'cl-macs) ; for `cl-assert'
+(require 'cl-lib) ; for `cl-assert'
 #+end_src
 
 **** customize
