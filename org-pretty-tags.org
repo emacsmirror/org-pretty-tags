@@ -485,7 +485,7 @@ this subtree.
 :END:
 
 #+begin_src emacs-lisp
-(defvar org-pretty-tags-overlays nil
+(defvar-local org-pretty-tags-overlays nil
  "Container for the overlays.")
 #+end_src
 
@@ -571,20 +571,14 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
         (outline-next-heading)))))
 
 (defun org-pretty-tags-refresh-overlays-buffer ()
-  "Overlay tags in current buffer.
+  "Overlay tags in current buffer if pretty tags mode is on.
 The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
-  (let ((inhibit-read-only t))
-    (cond
-     ((derived-mode-p 'org-agenda-mode) (org-pretty-tags-refresh-overlays-agenda))
-     ((derived-mode-p 'org-mode) (org-pretty-tags-refresh-overlays-org-mode))
-     (t (error "Function does not deal with the current context")))))
-
-(defun org-pretty-tags-refresh-overlays-all-buffers ()
-  "Overlay tags in all Org buffers."
-  (dolist (buf (buffer-list))
-    (set-buffer buf)
-    (when (derived-mode-p 'org-mode 'org-agenda-mode)
-      (org-pretty-tags-refresh-overlays-buffer))))
+  (when org-pretty-tags-mode
+    (let ((inhibit-read-only t))
+      (cond
+       ((derived-mode-p 'org-agenda-mode) (org-pretty-tags-refresh-overlays-agenda))
+       ((derived-mode-p 'org-mode) (org-pretty-tags-refresh-overlays-org-mode))
+       (t (error "Function does not deal with the current context"))))))
 #+end_src
 
 **** define the mode
@@ -598,13 +592,12 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
 
 ;;;###autoload
 (define-minor-mode org-pretty-tags-mode
-  "Display surrogates for tags."
+  "Display surrogates for tags in buffer."
   :lighter org-pretty-tags-mode-lighter
-  :global t
   (org-pretty-tags-delete-overlays)
   (cond
    (org-pretty-tags-mode
-    (org-pretty-tags-refresh-overlays-all-buffers)
+    (org-pretty-tags-refresh-overlays-buffer)
     (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-buffer)
     (add-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays-buffer)
     (add-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays-buffer))
