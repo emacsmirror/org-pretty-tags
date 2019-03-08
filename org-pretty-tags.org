@@ -21,7 +21,9 @@ wider range of tags could be nice.
 Notes:
 - The actual tag is not changed by the mode.  The surrogates are just
   decoration.
-- The mode is global.  Either on or off for all Org mode buffers.
+- pretty-tags-mode can be set per buffer.
+- There is a convenience function to change pretty-tags-mode in all
+  Org mode and Org agenda buffers.
 
 *** Example :ATTACH:
 :PROPERTIES:
@@ -44,8 +46,13 @@ It's easy!
 
 #+name: description-activate-surrogates
 #+begin_src text
-- Activate the mode with {M-x org-pretty-tags-mode RET}.
-- Deactivate the mode with a further {M-x org-pretty-tags-mode RET}.
+- Toggle the mode with {M-x org-pretty-tags-mode RET}.
+- Activate the mode with {C-u M-x org-pretty-tags-mode RET}.
+- Deactivate the mode with {C-u -1 M-x org-pretty-tags-mode RET}.
+
+- Toggle the mode in all buffers with {M-x org-pretty-tags-mode-global RET}.
+- Activate the mode in all buffers with {C-u M-x org-pretty-tags-mode-global RET}.
+- Deactivate the mode in all buffers with {C-u -1 M-x org-pretty-tags-mode-global RET}.
 #+end_src
 
 *** Definition of the Surrogates
@@ -76,7 +83,7 @@ org icon>".
 
 - If tag surrogates do not go away then save that file, kill the
   buffer and reload the file.  org-pretty-tags-mode should act normal
-  again.  Recall: the pretty tags are decoration and derived from the
+  again.  Recall: the pretty tags are decoration derived from the
   text.
 
 - Take care about the text hidden under the surrogates which can still be modified.
@@ -168,7 +175,7 @@ well.
 
 **** Detangle
 
-Recall to use the property line
+Recall the opportunity to use the property line
 
 #+begin_src text
 :header-args:emacs-lisp+: :comments both
@@ -180,12 +187,10 @@ instead of
 :header-args:emacs-lisp+: :comments no
 #+end_src
 
-to create tangle-info in the tangled file.  The additional info can be
-used with function org-babel-detangle.  Detangle means to edit the
-tangled file and bring these changes to the literate source file.
-
-It's recommended to use this line in section [[Functionality]] during
-development of the package.
+in section [[Functionality]] to create tangle-info in the tangled file.
+The additional info can be used with function org-babel-detangle.
+Detangle means to edit the tangled file and bring these changes to the
+literate source file.
 
 *** Create the Emacs Package file
 
