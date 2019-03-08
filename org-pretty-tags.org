@@ -607,6 +607,19 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
     (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays-buffer))))
 #+end_src
 
+#+begin_src emacs-lisp
+;;;###autoload
+(defun org-pretty-tags-mode-global (&optional arg)
+  "Set `org-pretty-tags-mode' in every buffer with argument ARG."
+  (declare (interactive-only t))
+  (interactive "P")
+  (ignore arg) ;; keep byte compiler quiet.
+  (dolist (buf (buffer-list))
+    (set-buffer buf)
+    (when (derived-mode-p 'org-mode 'org-agenda-mode)
+      (call-interactively #'org-pretty-tags-mode))))
+#+end_src
+
 *** Last Lines
 :PROPERTIES:
 :ID:       300d188f-9b90-4bd8-9d65-78823402a3de
