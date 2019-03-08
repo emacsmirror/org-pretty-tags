@@ -330,7 +330,6 @@ Thanks.
 
 ***** DONE +increase version to 0.1.2+
 
-*** Closed
 **** DONE +Make sure only tags get the surrogate+
 
 - +A match before the tag area gets replaced by the surrogate.+
@@ -477,7 +476,7 @@ this subtree.
 
 #+begin_src emacs-lisp
 
-;; global variables
+;; buffer local variables
 #+end_src
 
 ***** container for the overlays
