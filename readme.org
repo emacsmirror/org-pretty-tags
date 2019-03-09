@@ -529,7 +529,7 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
     (delete-overlay (pop org-pretty-tags-overlays))))
 
 ;; POTENTIAL: make sure only tags are changed.
-(defun org-pretty-tags-refresh-overlays-agenda ()
+(defun org-pretty-tags-refresh-overlays-agenda-use-just-agenda ()
   "Create pretty tags overlays for an org agenda buffer."
   (mapc (lambda (x)
           (org-with-point-at 1
@@ -541,6 +541,41 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
                 (overlay-put (car org-pretty-tags-overlays) 'display (cdr x))))))
         (append org-pretty-tags-surrogate-strings
                 (org-pretty-tags-image-specs org-pretty-tags-surrogate-images))))
+
+(defun org-pretty-tags-refresh-agenda-lines ()
+  "Place pretty tags in agenda lines."
+  ;; for each agenda line update according pretty state of respective org-file.
+  (message "org-pretty-tags-refresh-agenda-lines start")
+  (goto-char (point-max))
+  (beginning-of-line)
+  (let ((stopper (progn (org-agenda-previous-item 1) (point))))
+    (goto-char 1)
+    (org-agenda-next-item 1)
+    (let (escape)
+      (while (and (<= (point) stopper) (not escape))
+        (org-pretty-tags-refresh-agenda-line)
+        (when (= (point) stopper)
+          (setq escape t))
+        (org-agenda-next-item 1)))))
+
+(defun org-pretty-tags-refresh-agenda-line ()
+  "Place pretty tags in agenda line."
+  (message "org-pretty-tags-refresh-agenda-line start")
+  (if (with-current-buffer
+          (marker-buffer (or (org-get-at-bol 'org-marker) (org-agenda-error)))
+        org-pretty-tags-mode)
+      (mapc (lambda (x)
+              (beginning-of-line)
+              (let ((eol (save-excursion (end-of-line) (point))))
+                (message "eol %s" eol)
+                (while (re-search-forward
+                        (concat ":\\(" (car x) "\\):") eol t)
+                  (push (make-overlay (match-beginning 1) (match-end 1))
+                        org-pretty-tags-overlays)
+                  (overlay-put (car org-pretty-tags-overlays) 'display (cdr x)))))
+            (append org-pretty-tags-surrogate-strings
+                    (org-pretty-tags-image-specs org-pretty-tags-surrogate-images)))
+    (message "not in org-pretty-tags-mode")))
 
 (defun org-pretty-tags-refresh-overlays-org-mode ()
   "Create the overlays for the tags for the headlines in the buffer."
@@ -572,11 +607,10 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
 
 (defun org-pretty-tags-refresh-overlays-buffer ()
   "Overlay tags in current buffer if pretty tags mode is on.
-The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
+The mode of the buffer must be `org-mode'."
   (when org-pretty-tags-mode
     (let ((inhibit-read-only t))
       (cond
-       ((derived-mode-p 'org-agenda-mode) (org-pretty-tags-refresh-overlays-agenda))
        ((derived-mode-p 'org-mode) (org-pretty-tags-refresh-overlays-org-mode))
        (t (error "Function does not deal with the current context"))))))
 #+end_src
@@ -599,12 +633,12 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
    (org-pretty-tags-mode
     (org-pretty-tags-refresh-overlays-buffer)
     (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-buffer)
-    (add-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays-buffer)
-    (add-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays-buffer))
+    (add-hook 'org-ctrl-c-ctrl-c-hook #'org-pretty-tags-refresh-overlays-buffer)
+    (add-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-agenda-lines))
    (t
     (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-buffer)
-    (remove-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays-buffer)
-    (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays-buffer))))
+    (remove-hook 'org-ctrl-c-ctrl-c-hook #'org-pretty-tags-refresh-overlays-buffer)
+    (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-agenda-lines))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -616,7 +650,7 @@ The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
   (ignore arg) ;; keep byte compiler quiet.
   (dolist (buf (buffer-list))
     (set-buffer buf)
-    (when (derived-mode-p 'org-mode 'org-agenda-mode)
+    (when (derived-mode-p 'org-mode)
       (call-interactively #'org-pretty-tags-mode))))
 #+end_src
 
