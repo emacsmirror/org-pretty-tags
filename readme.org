@@ -529,19 +529,6 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
     (delete-overlay (pop org-pretty-tags-overlays))))
 
 ;; POTENTIAL: make sure only tags are changed.
-(defun org-pretty-tags-refresh-overlays-agenda-use-just-agenda ()
-  "Create pretty tags overlays for an org agenda buffer."
-  (mapc (lambda (x)
-          (org-with-point-at 1
-            (progn
-              (while (re-search-forward
-                      (concat ":\\(" (car x) "\\):") nil t)
-                (push (make-overlay (match-beginning 1) (match-end 1))
-                      org-pretty-tags-overlays)
-                (overlay-put (car org-pretty-tags-overlays) 'display (cdr x))))))
-        (append org-pretty-tags-surrogate-strings
-                (org-pretty-tags-image-specs org-pretty-tags-surrogate-images))))
-
 (defun org-pretty-tags-refresh-agenda-lines ()
   "Place pretty tags in agenda lines."
   ;; for each agenda line update according pretty state of respective org-file.
@@ -551,12 +538,17 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
   (let ((stopper (progn (org-agenda-previous-item 1) (point))))
     (goto-char 1)
     (org-agenda-next-item 1)
+    (while (and (get-char-property (point) 'invisible) (not (eobp)))
+	  (beginning-of-line 2))
     (let (escape)
       (while (and (<= (point) stopper) (not escape))
         (org-pretty-tags-refresh-agenda-line)
         (when (= (point) stopper)
           (setq escape t))
-        (org-agenda-next-item 1)))))
+        (org-agenda-next-item 1)
+        (while (and (get-char-property (point) 'invisible) (not (eobp)))
+	  (beginning-of-line 2))))))
+
 
 (defun org-pretty-tags-refresh-agenda-line ()
   "Place pretty tags in agenda line."
@@ -638,7 +630,8 @@ The mode of the buffer must be `org-mode'."
    (t
     (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-buffer)
     (remove-hook 'org-ctrl-c-ctrl-c-hook #'org-pretty-tags-refresh-overlays-buffer)
-    (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-agenda-lines))))
+    (if (org-pretty-tags-mode-off-in-every-buffer-p)
+        (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-agenda-lines)))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -652,6 +645,17 @@ The mode of the buffer must be `org-mode'."
     (set-buffer buf)
     (when (derived-mode-p 'org-mode)
       (call-interactively #'org-pretty-tags-mode))))
+
+(defun org-pretty-tags-mode-off-in-every-buffer-p ()
+  (let ((alloff t))
+    (dolist (buf (buffer-list))
+      (when (not alloff)
+        (set-buffer buf)
+        (when (and (derived-mode-p 'org-mode)
+                   org-pretty-tags-mode)
+          (setq alloff nil))))
+    alloff))
+
 #+end_src
 
 *** Last Lines
