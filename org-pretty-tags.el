@@ -5,7 +5,7 @@
 ;; additional information there.
 
 ;; Copyright 2019 Marco Wahl
-;; 
+;;
 ;; Author: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Created: [2019-01-06]
@@ -13,31 +13,36 @@
 ;; Package-Requires: ((emacs "25"))
 ;; Keywords: reading, outlines
 ;; URL: https://gitlab.com/marcowahl/org-pretty-tags
-;; 
+;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
-;; 
+;;
 ;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
-;; 
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 ;;; Commentary:
 
-;; - Activate the mode with {M-x org-pretty-tags-mode RET}.
-;; - Deactivate the mode with a further {M-x org-pretty-tags-mode RET}.
+;; - Toggle the mode with {M-x org-pretty-tags-mode RET}.
+;; - Activate the mode with {C-u M-x org-pretty-tags-mode RET}.
+;; - Deactivate the mode with {C-u -1 M-x org-pretty-tags-mode RET}.
+;;
+;; - Toggle the mode in all buffers with {M-x org-pretty-tags-mode-global RET}.
+;; - Activate the mode in all buffers with {C-u M-x org-pretty-tags-mode-global RET}.
+;; - Deactivate the mode in all buffers with {C-u -1 M-x org-pretty-tags-mode-global RET}.
 ;;
 ;; Use {M-x customize-variable RET org-pretty-tags-surrogate-strings RET} to
 ;; define surrogate strings for tags.  E.g. add the pair "money", "$$$".
-;; 
+;;
 ;; If you don't like the predefined surrogates then just delete them.
-;; 
+;;
 ;; Use {M-x customize-variable RET org-pretty-tags-surrogate-images RET} to
 ;; define surrogate images for tags.  The definition of the image is
 ;; expected to be a path to an image.  E.g. add the pair "org", "<path to
@@ -87,9 +92,9 @@
   :group 'org-pretty-tags)
 
 
-;; global variables
+;; buffer local variables
 
-(defvar org-pretty-tags-overlays nil
+(defvar-local org-pretty-tags-overlays nil
  "Container for the overlays.")
 
 
@@ -119,7 +124,7 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
     (delete-overlay (pop org-pretty-tags-overlays))))
 
 ;; POTENTIAL: make sure only tags are changed.
-(defun org-pretty-tags-refresh-overlays-agenda ()
+(defun org-pretty-tags-refresh-overlays-agenda-use-just-agenda ()
   "Create pretty tags overlays for an org agenda buffer."
   (mapc (lambda (x)
           (org-with-point-at 1
@@ -131,6 +136,41 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
                 (overlay-put (car org-pretty-tags-overlays) 'display (cdr x))))))
         (append org-pretty-tags-surrogate-strings
                 (org-pretty-tags-image-specs org-pretty-tags-surrogate-images))))
+
+(defun org-pretty-tags-refresh-agenda-lines ()
+  "Place pretty tags in agenda lines."
+  ;; for each agenda line update according pretty state of respective org-file.
+  (message "org-pretty-tags-refresh-agenda-lines start")
+  (goto-char (point-max))
+  (beginning-of-line)
+  (let ((stopper (progn (org-agenda-previous-item 1) (point))))
+    (goto-char 1)
+    (org-agenda-next-item 1)
+    (let (escape)
+      (while (and (<= (point) stopper) (not escape))
+        (org-pretty-tags-refresh-agenda-line)
+        (when (= (point) stopper)
+          (setq escape t))
+        (org-agenda-next-item 1)))))
+
+(defun org-pretty-tags-refresh-agenda-line ()
+  "Place pretty tags in agenda line."
+  (message "org-pretty-tags-refresh-agenda-line start")
+  (if (with-current-buffer
+          (marker-buffer (or (org-get-at-bol 'org-marker) (org-agenda-error)))
+        org-pretty-tags-mode)
+      (mapc (lambda (x)
+              (beginning-of-line)
+              (let ((eol (save-excursion (end-of-line) (point))))
+                (message "eol %s" eol)
+                (while (re-search-forward
+                        (concat ":\\(" (car x) "\\):") eol t)
+                  (push (make-overlay (match-beginning 1) (match-end 1))
+                        org-pretty-tags-overlays)
+                  (overlay-put (car org-pretty-tags-overlays) 'display (cdr x)))))
+            (append org-pretty-tags-surrogate-strings
+                    (org-pretty-tags-image-specs org-pretty-tags-surrogate-images)))
+    (message "not in org-pretty-tags-mode")))
 
 (defun org-pretty-tags-refresh-overlays-org-mode ()
   "Create the overlays for the tags for the headlines in the buffer."
@@ -161,40 +201,43 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
         (outline-next-heading)))))
 
 (defun org-pretty-tags-refresh-overlays-buffer ()
-  "Overlay tags in current buffer.
-The mode of the buffer must be either `org-mode' or `org-agenda-mode'."
-  (let ((inhibit-read-only t))
-    (cond
-     ((derived-mode-p 'org-agenda-mode) (org-pretty-tags-refresh-overlays-agenda))
-     ((derived-mode-p 'org-mode) (org-pretty-tags-refresh-overlays-org-mode))
-     (t (error "Function does not deal with the current context")))))
-
-(defun org-pretty-tags-refresh-overlays-all-buffers ()
-  "Overlay tags in all Org buffers."
-  (dolist (buf (buffer-list))
-    (set-buffer buf)
-    (when (derived-mode-p 'org-mode 'org-agenda-mode)
-      (org-pretty-tags-refresh-overlays-buffer))))
+  "Overlay tags in current buffer if pretty tags mode is on.
+The mode of the buffer must be `org-mode'."
+  (when org-pretty-tags-mode
+    (let ((inhibit-read-only t))
+      (cond
+       ((derived-mode-p 'org-mode) (org-pretty-tags-refresh-overlays-org-mode))
+       (t (error "Function does not deal with the current context"))))))
 
 
 ;; mode definition
 
 ;;;###autoload
 (define-minor-mode org-pretty-tags-mode
-  "Display surrogates for tags."
+  "Display surrogates for tags in buffer."
   :lighter org-pretty-tags-mode-lighter
-  :global t
   (org-pretty-tags-delete-overlays)
   (cond
    (org-pretty-tags-mode
-    (org-pretty-tags-refresh-overlays-all-buffers)
+    (org-pretty-tags-refresh-overlays-buffer)
     (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-buffer)
-    (add-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays-buffer)
-    (add-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays-buffer))
+    (add-hook 'org-ctrl-c-ctrl-c-hook #'org-pretty-tags-refresh-overlays-buffer)
+    (add-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-agenda-lines))
    (t
     (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-buffer)
-    (remove-hook 'org-ctrl-c-ctrl-c-final-hook #'org-pretty-tags-refresh-overlays-buffer)
-    (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-overlays-buffer))))
+    (remove-hook 'org-ctrl-c-ctrl-c-hook #'org-pretty-tags-refresh-overlays-buffer)
+    (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-agenda-lines))))
+
+;;;###autoload
+(defun org-pretty-tags-mode-global (&optional arg)
+  "Set `org-pretty-tags-mode' in every buffer with argument ARG."
+  (declare (interactive-only t))
+  (interactive "P")
+  (ignore arg) ;; keep byte compiler quiet.
+  (dolist (buf (buffer-list))
+    (set-buffer buf)
+    (when (derived-mode-p 'org-mode)
+      (call-interactively #'org-pretty-tags-mode))))
 
 
 (provide 'org-pretty-tags)
