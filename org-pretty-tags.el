@@ -97,6 +97,25 @@
 (defvar-local org-pretty-tags-overlays nil
  "Container for the overlays.")
 
+(defun org-pretty-tags-mode-off-in-every-buffer-p ()
+  "t if `org-pretty-tags-mode' is of in every Org buffer else nil."
+  (let ((alloff t))
+    (dolist (buf (buffer-list))
+      (when alloff
+        (set-buffer buf)
+        (when (and (derived-mode-p 'org-mode)
+                   org-pretty-tags-mode)
+          (setq alloff nil))))
+    alloff))
+
+(defun org-pretty-tags-goto-next-visible-agenda-item ()
+  "Move point to the eol of the next visible agenda item or else eob."
+  (while (progn
+           (goto-char (or (next-single-property-change (point) 'org-marker)
+                          (point-max)))
+           (end-of-line)
+           (and (get-char-property (point) 'invisible) (not (eobp))))))
+
 
 ;; get image specifications
 
@@ -125,43 +144,29 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
 
 ;; POTENTIAL: make sure only tags are changed.
 (defun org-pretty-tags-refresh-agenda-lines ()
-  "Place pretty tags in agenda lines."
-  ;; for each agenda line update according pretty state of respective org-file.
-  (message "org-pretty-tags-refresh-agenda-lines start")
-  (goto-char (point-max))
-  (beginning-of-line)
-  (let ((stopper (progn (org-agenda-previous-item 1) (point))))
-    (goto-char 1)
-    (org-agenda-next-item 1)
-    (while (and (get-char-property (point) 'invisible) (not (eobp)))
-	  (beginning-of-line 2))
-    (let (escape)
-      (while (and (<= (point) stopper) (not escape))
-        (org-pretty-tags-refresh-agenda-line)
-        (when (= (point) stopper)
-          (setq escape t))
-        (org-agenda-next-item 1)
-        (while (and (get-char-property (point) 'invisible) (not (eobp)))
-	  (beginning-of-line 2))))))
+  "Place pretty tags in agenda lines according pretty tags state of Org file."
+  (goto-char (point-min))
+  (while (progn (org-pretty-tags-goto-next-visible-agenda-item)
+                (not (eobp)))
+    (org-pretty-tags-refresh-agenda-line)
+    (end-of-line)))
 
 (defun org-pretty-tags-refresh-agenda-line ()
   "Place pretty tags in agenda line."
-  (message "org-pretty-tags-refresh-agenda-line start")
-  (if (with-current-buffer
-          (marker-buffer (or (org-get-at-bol 'org-marker) (org-agenda-error)))
-        org-pretty-tags-mode)
-      (mapc (lambda (x)
-              (beginning-of-line)
-              (let ((eol (save-excursion (end-of-line) (point))))
-                (message "eol %s" eol)
-                (while (re-search-forward
-                        (concat ":\\(" (car x) "\\):") eol t)
-                  (push (make-overlay (match-beginning 1) (match-end 1))
-                        org-pretty-tags-overlays)
-                  (overlay-put (car org-pretty-tags-overlays) 'display (cdr x)))))
-            (append org-pretty-tags-surrogate-strings
-                    (org-pretty-tags-image-specs org-pretty-tags-surrogate-images)))
-    (message "not in org-pretty-tags-mode")))
+  (when (with-current-buffer
+            (marker-buffer (org-get-at-bol 'org-marker))
+          org-pretty-tags-mode)
+    (mapc (lambda (x)
+            (beginning-of-line)
+            (let ((eol (save-excursion (end-of-line) (point))))
+              (message "eol %s" eol)
+              (while (re-search-forward
+                      (concat ":\\(" (car x) "\\):") eol t)
+                (push (make-overlay (match-beginning 1) (match-end 1))
+                      org-pretty-tags-overlays)
+                (overlay-put (car org-pretty-tags-overlays) 'display (cdr x)))))
+          (append org-pretty-tags-surrogate-strings
+                  (org-pretty-tags-image-specs org-pretty-tags-surrogate-images)))))
 
 (defun org-pretty-tags-refresh-overlays-org-mode ()
   "Create the overlays for the tags for the headlines in the buffer."
@@ -184,7 +189,7 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
                 (when-let ((surrogate-cons
                             (assoc (buffer-substring (match-beginning 1)
                                                      (match-end 1))
-                                                  surrogates)))
+                                   surrogates)))
                   (push (make-overlay (match-beginning 1) (match-end 1))
                         org-pretty-tags-overlays)
                   (overlay-put (car org-pretty-tags-overlays)
@@ -194,11 +199,15 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
 (defun org-pretty-tags-refresh-overlays-buffer ()
   "Overlay tags in current buffer if pretty tags mode is on.
 The mode of the buffer must be `org-mode'."
-  (when org-pretty-tags-mode
-    (let ((inhibit-read-only t))
-      (cond
-       ((derived-mode-p 'org-mode) (org-pretty-tags-refresh-overlays-org-mode))
-       (t (error "Function does not deal with the current context"))))))
+  (let ((inhibit-read-only t))
+    (cond
+     ((derived-mode-p 'org-mode)
+      (org-pretty-tags-refresh-overlays-org-mode))
+     ((derived-mode-p 'org-agenda-mode)
+      (save-excursion
+        (org-pretty-tags-refresh-agenda-lines)))
+     (t (error "org-pretty-tags-refresh-overlays-buffer: no support for mode %s"
+               major-mode)))))
 
 
 ;; mode definition
@@ -230,16 +239,6 @@ The mode of the buffer must be `org-mode'."
     (set-buffer buf)
     (when (derived-mode-p 'org-mode)
       (call-interactively #'org-pretty-tags-mode))))
-
-(defun org-pretty-tags-mode-off-in-every-buffer-p ()
-  (let ((alloff t))
-    (dolist (buf (buffer-list))
-      (when (not alloff)
-        (set-buffer buf)
-        (when (and (derived-mode-p 'org-mode)
-                   org-pretty-tags-mode)
-          (setq alloff nil))))
-    alloff))
 
 
 (provide 'org-pretty-tags)
