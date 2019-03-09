@@ -20,10 +20,13 @@ wider range of tags could be nice.
 
 Notes:
 - The actual tag is not changed by the mode.  The surrogates are just
-  decoration.
-- pretty-tags-mode can be set per buffer.
-- There is a convenience function to change pretty-tags-mode in all
-  Org mode and Org agenda buffers.
+  decoration, the text "below" the decoration remains the same.
+- =pretty-tags-mode= can be set per buffer.
+- There is a convenience function to change =pretty-tags-mode= in all
+  Org mode buffers.
+- The decoration of the tags for an agenda item follows the setting in
+  the respective org file.  Keys =g= and =r= refresh the agenda and
+  updates the display of the pretty tags.
 
 *** Example :ATTACH:
 :PROPERTIES:
@@ -38,21 +41,28 @@ Notes:
 
 [[data/a0/a7f0d8-cdc8-414b-a715-e48205d07deb/emacsshot.win-20190106143055.png]]
 
-** Use :easy:
+** Concrete Use :easy:
 
 It's easy!
 
 *** Activate/Deactivate
 
-#+name: description-activate-surrogates
+**** Activate/Deactivate For an Org Mode Buffer
+
+#+name: description-activate-surrogates-buffer
 #+begin_src text
 - Toggle the mode with {M-x org-pretty-tags-mode RET}.
 - Activate the mode with {C-u M-x org-pretty-tags-mode RET}.
 - Deactivate the mode with {C-u -1 M-x org-pretty-tags-mode RET}.
+#+end_src
 
-- Toggle the mode in all buffers with {M-x org-pretty-tags-mode-global RET}.
-- Activate the mode in all buffers with {C-u M-x org-pretty-tags-mode-global RET}.
-- Deactivate the mode in all buffers with {C-u -1 M-x org-pretty-tags-mode-global RET}.
+**** Activate/Deactivate For all Org Mode Buffers
+
+#+name: description-activate-surrogates-all-buffers
+#+begin_src text
+- Toggle the mode in every buffer with {M-x org-pretty-tags-mode-global RET}.
+- Activate the mode in every buffer with {C-u M-x org-pretty-tags-mode-global RET}.
+- Deactivate the mode in every buffer with {C-u -1 M-x org-pretty-tags-mode-global RET}.
 #+end_src
 
 *** Definition of the Surrogates
@@ -77,14 +87,14 @@ org icon>".
 
 - The mode is not able to update the tag surrogates for every scenario.
 
-- If the tag surrogates don't show up normally then try "reset" with
-  {C-u M-x org-pretty-tags-mode RET}. Note the C-u.  Or turn
-  org-pretty-tags-mode off and on again.  E.g. two times ={M-x org-pretty-tags-mode RET}=.
+- If the tag surrogates don't show up as expected then try "reset"
+  with {C-u M-x org-pretty-tags-mode RET}. Note the C-u.  Or turn
+  org-pretty-tags-mode off and on again.  E.g. two times ={M-x
+  org-pretty-tags-mode RET}=.
 
-- If tag surrogates do not go away then save that file, kill the
-  buffer and reload the file.  org-pretty-tags-mode should act normal
-  again.  Recall: the pretty tags are decoration derived from the
-  text.
+- If tag surrogates do not go away then save the file, kill the buffer
+  and reload the file.  org-pretty-tags-mode should act normal again.
+  Recall: the pretty tags are just decoration derived from the text.
 
 - Take care about the text hidden under the surrogates which can still be modified.
   - To see the effect enable org-pretty-tags-mode.
@@ -115,7 +125,7 @@ will see.
 
 #+name: org-pretty-tags-version
 #+begin_src text
-0.1.4
+0.1.5
 #+end_src
 
 *** Typical Metadata
@@ -210,7 +220,7 @@ See section [[Detangle]].
 
 *** Contact
 
-Contribute or send feedback, wishes, bug reports, etc. to
+Send feedback, wishes, bug reports, contributions etc. to
 marcowahlsoft@gmail.com.
 
 ** Tasks
@@ -358,7 +368,9 @@ Thanks.
 
 ;;; Commentary:
 
-;; <<description-activate-surrogates>>
+;; <<description-activate-surrogates-buffer>>
+;;
+;; <<description-activate-surrogates-all-buffers>>
 ;;
 ;; <<description-define-surrogates>>
 ;;
