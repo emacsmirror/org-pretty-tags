@@ -507,6 +507,16 @@ this subtree.
     alloff))
 #+end_src
 
+#+begin_src emacs-lisp
+(defun org-pretty-tags-goto-next-visible-agenda-item ()
+  "Move point to the eol of the next visible agenda item or else eob."
+  (while (progn
+           (goto-char (or (next-single-property-change (point) 'org-marker)
+                          (point-max)))
+           (end-of-line)
+           (and (get-char-property (point) 'invisible) (not (eobp))))))
+#+end_src
+
 **** generate image specs
 :PROPERTIES:
 :ID:       fb26c0bc-a69e-4cd2-8b5a-800682d24706
