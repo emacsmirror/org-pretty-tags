@@ -5,25 +5,25 @@
 ;; additional information there.
 
 ;; Copyright 2019 Marco Wahl
-;;
+;; 
 ;; Author: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Created: [2019-01-06]
-;; Version: 0.1.4
+;; Version: 0.1.5
 ;; Package-Requires: ((emacs "25"))
 ;; Keywords: reading, outlines
 ;; URL: https://gitlab.com/marcowahl/org-pretty-tags
-;;
+;; 
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
-;;
+;; 
 ;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
-;;
+;; 
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -34,15 +34,15 @@
 ;; - Activate the mode with {C-u M-x org-pretty-tags-mode RET}.
 ;; - Deactivate the mode with {C-u -1 M-x org-pretty-tags-mode RET}.
 ;;
-;; - Toggle the mode in all buffers with {M-x org-pretty-tags-mode-global RET}.
-;; - Activate the mode in all buffers with {C-u M-x org-pretty-tags-mode-global RET}.
-;; - Deactivate the mode in all buffers with {C-u -1 M-x org-pretty-tags-mode-global RET}.
+;; - Toggle the mode in every buffer with {M-x org-pretty-tags-mode-global RET}.
+;; - Activate the mode in every buffer with {C-u M-x org-pretty-tags-mode-global RET}.
+;; - Deactivate the mode in every buffer with {C-u -1 M-x org-pretty-tags-mode-global RET}.
 ;;
 ;; Use {M-x customize-variable RET org-pretty-tags-surrogate-strings RET} to
 ;; define surrogate strings for tags.  E.g. add the pair "money", "$$$".
-;;
+;; 
 ;; If you don't like the predefined surrogates then just delete them.
-;;
+;; 
 ;; Use {M-x customize-variable RET org-pretty-tags-surrogate-images RET} to
 ;; define surrogate images for tags.  The definition of the image is
 ;; expected to be a path to an image.  E.g. add the pair "org", "<path to
@@ -97,6 +97,17 @@
 (defvar-local org-pretty-tags-overlays nil
  "Container for the overlays.")
 
+
+;; auxilliaries
+
+(defun org-pretty-tags-goto-next-visible-agenda-item ()
+  "Move point to the eol of the next visible agenda item or else eob."
+  (while (progn
+           (goto-char (or (next-single-property-change (point) 'org-marker)
+                          (point-max)))
+           (end-of-line)
+           (and (get-char-property (point) 'invisible) (not (eobp))))))
+
 (defun org-pretty-tags-mode-off-in-every-buffer-p ()
   "t if `org-pretty-tags-mode' is of in every Org buffer else nil."
   (let ((alloff t))
@@ -107,14 +118,6 @@
                    org-pretty-tags-mode)
           (setq alloff nil))))
     alloff))
-
-(defun org-pretty-tags-goto-next-visible-agenda-item ()
-  "Move point to the eol of the next visible agenda item or else eob."
-  (while (progn
-           (goto-char (or (next-single-property-change (point) 'org-marker)
-                          (point-max)))
-           (end-of-line)
-           (and (get-char-property (point) 'invisible) (not (eobp))))))
 
 
 ;; get image specifications
@@ -196,19 +199,6 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
                                'display (cdr surrogate-cons))))))
         (outline-next-heading)))))
 
-(defun org-pretty-tags-refresh-overlays-buffer ()
-  "Overlay tags in current buffer if pretty tags mode is on.
-The mode of the buffer must be `org-mode'."
-  (let ((inhibit-read-only t))
-    (cond
-     ((derived-mode-p 'org-mode)
-      (org-pretty-tags-refresh-overlays-org-mode))
-     ((derived-mode-p 'org-agenda-mode)
-      (save-excursion
-        (org-pretty-tags-refresh-agenda-lines)))
-     (t (error "org-pretty-tags-refresh-overlays-buffer: no support for mode %s"
-               major-mode)))))
-
 
 ;; mode definition
 
@@ -219,13 +209,13 @@ The mode of the buffer must be `org-mode'."
   (org-pretty-tags-delete-overlays)
   (cond
    (org-pretty-tags-mode
-    (org-pretty-tags-refresh-overlays-buffer)
-    (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-buffer)
-    (add-hook 'org-ctrl-c-ctrl-c-hook #'org-pretty-tags-refresh-overlays-buffer)
+    (org-pretty-tags-refresh-overlays-org-mode)
+    (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-org-mode)
+    (add-hook 'org-ctrl-c-ctrl-c-hook #'org-pretty-tags-refresh-overlays-org-mode)
     (add-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-agenda-lines))
    (t
-    (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-buffer)
-    (remove-hook 'org-ctrl-c-ctrl-c-hook #'org-pretty-tags-refresh-overlays-buffer)
+    (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-org-mode)
+    (remove-hook 'org-ctrl-c-ctrl-c-hook #'org-pretty-tags-refresh-overlays-org-mode)
     (if (org-pretty-tags-mode-off-in-every-buffer-p)
         (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-agenda-lines)))))
 
