@@ -617,7 +617,9 @@ The mode of the buffer must be `org-mode'."
     (let ((inhibit-read-only t))
       (cond
        ((derived-mode-p 'org-mode) (org-pretty-tags-refresh-overlays-org-mode))
-       (t (error "Function does not deal with the current context"))))))
+       ((derived-mode-p 'org-agenda-mode) (org-pretty-tags-refresh-agenda-lines))
+       (t (error "org-pretty-tags-refresh-overlays-buffer: no support for mode %s"
+major-mode))))))
 #+end_src
 
 **** define the mode
