@@ -603,7 +603,7 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
                 (when-let ((surrogate-cons
                             (assoc (buffer-substring (match-beginning 1)
                                                      (match-end 1))
-                                                  surrogates)))
+                                   surrogates)))
                   (push (make-overlay (match-beginning 1) (match-end 1))
                         org-pretty-tags-overlays)
                   (overlay-put (car org-pretty-tags-overlays)
