@@ -609,19 +609,6 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
                   (overlay-put (car org-pretty-tags-overlays)
                                'display (cdr surrogate-cons))))))
         (outline-next-heading)))))
-
-(defun org-pretty-tags-refresh-overlays-buffer ()
-  "Overlay tags in current buffer if pretty tags mode is on.
-The mode of the buffer must be `org-mode'."
-  (let ((inhibit-read-only t))
-    (cond
-     ((derived-mode-p 'org-mode)
-      (org-pretty-tags-refresh-overlays-org-mode))
-     ((derived-mode-p 'org-agenda-mode)
-      (save-excursion
-        (org-pretty-tags-refresh-agenda-lines)))
-     (t (error "org-pretty-tags-refresh-overlays-buffer: no support for mode %s"
-               major-mode)))))
 #+end_src
 
 **** define the mode
