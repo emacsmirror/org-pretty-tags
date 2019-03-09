@@ -489,6 +489,24 @@ this subtree.
  "Container for the overlays.")
 #+end_src
 
+**** auxilliaries
+:PROPERTIES:
+:ID:       27b0e435-8fba-4c71-b868-7b5c9a4f050e
+:END:
+
+#+begin_src emacs-lisp
+(defun org-pretty-tags-mode-off-in-every-buffer-p ()
+  "t if `org-pretty-tags-mode' is of in every Org buffer else nil."
+  (let ((alloff t))
+    (dolist (buf (buffer-list))
+      (when alloff
+        (set-buffer buf)
+        (when (and (derived-mode-p 'org-mode)
+                   org-pretty-tags-mode)
+          (setq alloff nil))))
+    alloff))
+#+end_src
+
 **** generate image specs
 :PROPERTIES:
 :ID:       fb26c0bc-a69e-4cd2-8b5a-800682d24706
@@ -645,17 +663,6 @@ The mode of the buffer must be `org-mode'."
     (set-buffer buf)
     (when (derived-mode-p 'org-mode)
       (call-interactively #'org-pretty-tags-mode))))
-
-(defun org-pretty-tags-mode-off-in-every-buffer-p ()
-  (let ((alloff t))
-    (dolist (buf (buffer-list))
-      (when (not alloff)
-        (set-buffer buf)
-        (when (and (derived-mode-p 'org-mode)
-                   org-pretty-tags-mode)
-          (setq alloff nil))))
-    alloff))
-
 #+end_src
 
 *** Last Lines
