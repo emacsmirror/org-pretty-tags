@@ -206,6 +206,8 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
 (define-minor-mode org-pretty-tags-mode
   "Display surrogates for tags in buffer."
   :lighter org-pretty-tags-mode-lighter
+  (unless (derived-mode-p 'org-mode)
+    (user-error "org-pretty-tags-mode is for Org mode buffers only"))
   (org-pretty-tags-delete-overlays)
   (cond
    (org-pretty-tags-mode
