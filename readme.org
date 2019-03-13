@@ -21,8 +21,8 @@ wider range of tags could be nice.
 Notes:
 - The actual tag is not changed by the mode.  The surrogates are just
   decoration, the text "below" the decoration remains the same.
-- =pretty-tags-mode= can be set per buffer.
-- There is a convenience function to change =pretty-tags-mode= in all
+- =org-pretty-tags-mode= can be set per buffer.
+- There is a convenience function to change =org-pretty-tags-mode= in all
   Org mode buffers.
 - The decoration of the tags for an agenda item follows the setting in
   the respective org file.  Keys =g= and =r= refresh the agenda and
