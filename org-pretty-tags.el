@@ -30,9 +30,14 @@
 
 ;;; Commentary:
 
+;; In an Org mode buffer:
+;; 
 ;; - Toggle the mode with {M-x org-pretty-tags-mode RET}.
 ;; - Activate the mode with {C-u M-x org-pretty-tags-mode RET}.
 ;; - Deactivate the mode with {C-u -1 M-x org-pretty-tags-mode RET}.
+;; 
+;; The same commands in an Org agenda buffer perform in the same way as
+;; stated above for _every_ Org mode buffer.
 ;;
 ;; - Toggle the mode in every buffer with {M-x org-pretty-tags-mode-global RET}.
 ;; - Activate the mode in every buffer with {C-u M-x org-pretty-tags-mode-global RET}.
@@ -204,22 +209,30 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
 
 ;;;###autoload
 (define-minor-mode org-pretty-tags-mode
-  "Display surrogates for tags in buffer."
+  "Display surrogates for tags in buffer.
+This mode is local to Org mode buffers.
+
+Special: when invoked from an Org agenda buffer the mode gets
+applied to every Org mode buffer."
   :lighter org-pretty-tags-mode-lighter
-  (unless (derived-mode-p 'org-mode)
-    (user-error "org-pretty-tags-mode is for Org mode buffers only"))
-  (org-pretty-tags-delete-overlays)
-  (cond
-   (org-pretty-tags-mode
-    (org-pretty-tags-refresh-overlays-org-mode)
-    (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-org-mode)
-    (add-hook 'org-ctrl-c-ctrl-c-hook #'org-pretty-tags-refresh-overlays-org-mode)
-    (add-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-agenda-lines))
-   (t
-    (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-org-mode)
-    (remove-hook 'org-ctrl-c-ctrl-c-hook #'org-pretty-tags-refresh-overlays-org-mode)
-    (if (org-pretty-tags-mode-off-in-every-buffer-p)
-        (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-agenda-lines)))))
+  (if (derived-mode-p 'org-agenda-mode)
+      (progn
+        (call-interactively #'org-pretty-tags-mode-global)
+        (org-agenda-redo))
+    (unless (derived-mode-p 'org-mode)
+      (user-error "org-pretty-tags-mode performs for Org mode or Org agenda buffers only"))
+    (org-pretty-tags-delete-overlays)
+    (cond
+     (org-pretty-tags-mode
+      (org-pretty-tags-refresh-overlays-org-mode)
+      (add-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-org-mode)
+      (add-hook 'org-ctrl-c-ctrl-c-hook #'org-pretty-tags-refresh-overlays-org-mode)
+      (add-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-agenda-lines))
+     (t
+      (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-org-mode)
+      (remove-hook 'org-ctrl-c-ctrl-c-hook #'org-pretty-tags-refresh-overlays-org-mode)
+      (if (org-pretty-tags-mode-off-in-every-buffer-p)
+          (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-agenda-lines))))))
 
 ;;;###autoload
 (defun org-pretty-tags-mode-global (&optional arg)
@@ -227,10 +240,11 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
   (declare (interactive-only t))
   (interactive "P")
   (ignore arg) ;; keep byte compiler quiet.
-  (dolist (buf (buffer-list))
-    (set-buffer buf)
-    (when (derived-mode-p 'org-mode)
-      (call-interactively #'org-pretty-tags-mode))))
+  (save-excursion
+    (dolist (buf (buffer-list))
+      (set-buffer buf)
+      (when (derived-mode-p 'org-mode)
+        (call-interactively #'org-pretty-tags-mode)))))
 
 
 (provide 'org-pretty-tags)
