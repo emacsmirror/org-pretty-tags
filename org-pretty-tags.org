@@ -133,7 +133,7 @@ Install by adding the respective lines to your init.el:
 
 #+name: org-pretty-tags-version
 #+begin_src text
-0.1.5
+0.2.0
 #+end_src
 
 *** Typical Metadata
