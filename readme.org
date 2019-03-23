@@ -110,19 +110,18 @@ org icon>".
 
 ** Install
 
-Install by adding the respective lines to your init.el (as usual):
+*** Melpa
+
+Install =org-pretty-tags= from the melpa repository.
+
+*** By foot
+
+Install by adding the respective lines to your init.el:
 
 #+begin_src emacs-lisp :tangle no
 (push "<path/to/org-pretty-tags>" load-path)
 (require 'org-pretty-tags)
 #+end_src
-
-If =org-pretty-tags= gets accepted as a package then one can install
-the mode with the package manager build into Emacs.
-
-Then there would be no need for extra lines in the Emacs init file to
-activate the package after the install if I understand correctly.  We
-will see.
 
 ** Package Metadata
 
