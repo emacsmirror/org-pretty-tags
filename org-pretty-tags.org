@@ -22,7 +22,7 @@ Notes:
 - The actual tag is not changed by the mode.  The surrogates are just
   decoration, the text "below" the decoration remains the same.
 - =org-pretty-tags-mode= can be set per buffer.
-- There is a =org-pretty-tags-global-mode= set or unset
+- There is a =org-pretty-tags-global-mode= to set or unset
   =org-pretty-tags-mode= in all Org mode buffers.
 - The decoration of the tags for an agenda item follows the setting in
   the respective org file.  Keys =g= and =r= refresh the agenda and
