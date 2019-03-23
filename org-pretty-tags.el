@@ -231,14 +231,6 @@ applied to every Org mode buffer."
       (if (org-pretty-tags-mode-off-in-every-buffer-p)
           (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-agenda-lines)))))
 
-;; (add-hook
-;;  'org-pretty-tags-global-mode-hook
-;;  (lambda ()
-;;    (dolist (buf (buffer-list))
-;;       (set-buffer buf)
-;;       (when (derived-mode-p 'org-agenda-mode)
-;;         (org-agenda-redo)))))
-
 ;;;###autoload
 (define-global-minor-mode org-pretty-tags-global-mode
   org-pretty-tags-mode

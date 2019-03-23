@@ -670,14 +670,6 @@ applied to every Org mode buffer."
 #+end_src
 
 #+begin_src emacs-lisp
-;; (add-hook
-;;  'org-pretty-tags-global-mode-hook
-;;  (lambda ()
-;;    (dolist (buf (buffer-list))
-;;       (set-buffer buf)
-;;       (when (derived-mode-p 'org-agenda-mode)
-;;         (org-agenda-redo)))))
-
 ;;;###autoload
 (define-global-minor-mode org-pretty-tags-global-mode
   org-pretty-tags-mode
