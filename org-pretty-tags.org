@@ -11,7 +11,7 @@ tags.
 ** Why
 
 In Org mode only a small set of characters is allowed in tags.  A
-wider range of symbols for tags could be nice.
+wider range of symbols might increase readability and joy.
 
 ** What the mode offers
 
