@@ -221,7 +221,7 @@ Special: when invoked from an Org agenda buffer the mode gets
 applied to every Org mode buffer."
   :lighter org-pretty-tags-mode-lighter
   (unless (derived-mode-p 'org-mode)
-      (user-error "org-pretty-tags-mode performs for Org mode only.  Consider org-pretty-tags-mode-global"))
+      (user-error "org-pretty-tags-mode performs for Org mode only.  Consider org-pretty-tags-global-mode"))
     (org-pretty-tags-delete-overlays)
     (cond
      (org-pretty-tags-mode
