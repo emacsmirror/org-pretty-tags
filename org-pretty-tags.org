@@ -35,11 +35,11 @@ Notes:
 
 **** Ordinary tag display
 
-[[data/a0/a7f0d8-cdc8-414b-a715-e48205d07deb/emacsshot.win-20190106143046.png]]
+[[./data/a0/a7f0d8-cdc8-414b-a715-e48205d07deb/emacsshot.win-20190106143046.png]]
 
 **** Pretty tag display
 
-[[data/a0/a7f0d8-cdc8-414b-a715-e48205d07deb/emacsshot.win-20190106143055.png]]
+[[./data/a0/a7f0d8-cdc8-414b-a715-e48205d07deb/emacsshot.win-20190106143055.png]]
 
 ** Concrete Use :easy:
 
@@ -240,8 +240,11 @@ Send feedback, wishes, bug reports, contributions etc. to
 marcowahlsoft@gmail.com.
 
 ** Tasks
+
 *** Open
+
 *** Closed
+
 **** DONE +Update according to the second reaction on melpa+
 
 - You shouldn't need the `:files` spec, but you should rename
