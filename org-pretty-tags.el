@@ -141,7 +141,7 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
            (let ((px-subtract-from-image-height 5))
              (create-image
               (cdr x)
-              'imagemagick nil
+              nil nil
               :height (- (window-font-height)
                          px-subtract-from-image-height)
               :ascent 'center))))
