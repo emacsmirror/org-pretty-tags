@@ -116,9 +116,8 @@ org icon>".
     - Toggle the mode with {M-x org-pretty-tags-mode RET}.
     - Result: See that one character is missing.
 
-*** Links
-
-Org mode has already =org-tag-faces= which can be used to set the face for certain tags.
+- Org mode has already =org-tag-faces= which can be used to set the
+  face for certain tags.
 
 ** Install
 
