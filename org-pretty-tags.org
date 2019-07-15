@@ -602,9 +602,11 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
 
 (defun org-pretty-tags-refresh-agenda-line ()
   "Place pretty tags in agenda line."
-  (when (with-current-buffer
-            (marker-buffer (org-get-at-bol 'org-marker))
-          org-pretty-tags-mode)
+  (when (let ((marker-buffer (marker-buffer (org-get-at-bol 'org-marker))))
+          (and marker-buffer
+               (with-current-buffer
+                   marker-buffer
+                 org-pretty-tags-mode)))
     (mapc (lambda (x)
             (beginning-of-line)
             (let ((eol (save-excursion (end-of-line) (point))))
