@@ -610,7 +610,6 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
     (mapc (lambda (x)
             (beginning-of-line)
             (let ((eol (save-excursion (end-of-line) (point))))
-              (message "eol %s" eol)
               (while (re-search-forward
                       (concat ":\\(" (car x) "\\):") eol t)
                 (push (make-overlay (match-beginning 1) (match-end 1))
