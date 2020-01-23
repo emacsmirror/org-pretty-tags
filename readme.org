@@ -13,7 +13,7 @@ tags.
 In Org mode only a small set of characters is allowed in tags.  A
 wider range of symbols might increase readability and joy.
 
-** What the mode offers
+** What
 
 - A way to define surrogate strings and surrogate images for certain tags.
 - Overlay the tags with the surrogates for Org mode files and Org agendas.
@@ -41,9 +41,9 @@ Notes:
 
 [[./data/a0/a7f0d8-cdc8-414b-a715-e48205d07deb/emacsshot.win-20190106143055.png]]
 
-*** Concrete Use :easy:
+*** Documentation
 
-It's easy!
+This section describes all the program got.
 
 **** Activate/Deactivate
 
@@ -90,7 +90,25 @@ expected to be a path to an image.  E.g. add the pair "org", "<path to
 org icon>".
 #+end_src
 
-**** Hints
+**** Define the lighter
+
+#+name: description-customize-org-pretty-tags-mode-lighter
+#+begin_src text
+Customize description-customize-org-pretty-tags-mode-lighter to define
+the lighter, i.e. the indicator that the mode is active in the mode
+line.
+#+end_src
+
+**** Inhibit prettifying habit lines
+
+#+name: description-customize-org-pretty-tags-agenda-unpretty-habits
+#+begin_src text
+In the org agenda pretty tags can distray the allignment of the habit
+table.  Customize org-pretty-tags-agenda-unpretty-habits to avoid
+this.
+#+end_src
+
+*** Hints
 
 - Recommendation: change tags with the key sequence =C-c C-c= on the
   headline.  Then =org-pretty-tags= can do the right thing.
@@ -399,6 +417,10 @@ Thanks.
 ;; <<description-activate-surrogates-all-buffers>>
 ;;
 ;; <<description-define-surrogates>>
+;;
+;; <<description-customize-org-pretty-tags-mode-lighter>>
+;;
+;; <<description-customize-org-pretty-tags-agenda-unpretty-habits>>
 ;;
 ;; See also the literate source file.  E.g. see https://gitlab.com/marcowahl/org-pretty-tags.
 #+end_src

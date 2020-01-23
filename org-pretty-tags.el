@@ -58,6 +58,14 @@
 ;; expected to be a path to an image.  E.g. add the pair "org", "<path to
 ;; org icon>".
 ;;
+;; Customize description-customize-org-pretty-tags-mode-lighter to define
+;; the lighter, i.e. the indicator that the mode is active in the mode
+;; line.
+;;
+;; In the org agenda pretty tags can distray the allignment of the habit
+;; table.  Customize org-pretty-tags-agenda-unpretty-habits to avoid
+;; this.
+;;
 ;; See also the literate source file.  E.g. see https://gitlab.com/marcowahl/org-pretty-tags.
 
 
