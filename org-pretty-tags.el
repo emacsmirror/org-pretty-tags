@@ -4,12 +4,12 @@
 ;; edit the literate source file "org-pretty-tags.org".  Find also
 ;; additional information there.
 
-;; Copyright 2019 Marco Wahl
+;; Copyright 2019, 2020 Marco Wahl
 ;; 
 ;; Author: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Created: [2019-01-06]
-;; Version: 0.2.0
+;; Version: 0.2.2
 ;; Package-Requires: ((emacs "25"))
 ;; Keywords: reading, outlines
 ;; URL: https://gitlab.com/marcowahl/org-pretty-tags
@@ -103,6 +103,14 @@
   :type 'string
   :group 'org-pretty-tags)
 
+;;;###autoload
+(defcustom org-pretty-tags-agenda-unpretty-habits
+  nil
+  "If non-nil don't prettify agenda habit lines.  This feature helps
+to keep the alignment of the habit table."
+  :type 'boolean
+  :group 'org-pretty-tags)
+
 
 ;; buffer local variables
 
@@ -163,7 +171,10 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
   (goto-char (point-min))
   (while (progn (org-pretty-tags-goto-next-visible-agenda-item)
                 (not (eobp)))
-    (org-pretty-tags-refresh-agenda-line)
+    (unless (and org-pretty-tags-agenda-unpretty-habits
+                 (get-char-property
+                  (save-excursion (beginning-of-line) (point)) 'org-habit-p))
+      (org-pretty-tags-refresh-agenda-line))
     (end-of-line)))
 
 (defun org-pretty-tags-refresh-agenda-line ()

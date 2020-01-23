@@ -3,12 +3,12 @@
 
 ;; THIS FILE HAS BEEN GENERATED.  see the literate source.
 
-;; Copyright 2019 Marco Wahl
+;; Copyright 2019, 2020 Marco Wahl
 ;; 
 ;; Author: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Created: [2019-01-06]
-;; Version: 0.2.0
+;; Version: 0.2.2
 ;; Package-Requires: ((emacs "25"))
 ;; Keywords: reading, outlines
 ;; URL: https://gitlab.com/marcowahl/org-pretty-tags

@@ -41,13 +41,13 @@ Notes:
 
 [[./data/a0/a7f0d8-cdc8-414b-a715-e48205d07deb/emacsshot.win-20190106143055.png]]
 
-** Concrete Use :easy:
+*** Concrete Use :easy:
 
 It's easy!
 
-*** Activate/Deactivate
+**** Activate/Deactivate
 
-**** Activate/Deactivate For an Org Mode Buffer
+***** Activate/Deactivate For an Org Mode Buffer
 
 #+name: description-activate-surrogates-buffer
 #+begin_src org
@@ -58,7 +58,7 @@ In an Org mode buffer:
 - Deactivate the mode with {C-u -1 M-x org-pretty-tags-mode RET}.
 #+end_src
 
-**** Activate/Deactivate For all Org Mode Buffers
+***** Activate/Deactivate For all Org Mode Buffers
 
 #+name: description-activate-surrogates-all-buffers
 #+begin_src org
@@ -75,7 +75,7 @@ of pretty tags in the buffers.
   customize-variable RET org-pretty-tags-global-mode RET}.
 #+end_src
 
-*** Definition of the Surrogates
+**** Definition of the Surrogates
 
 #+name: description-define-surrogates
 #+begin_src text
@@ -90,7 +90,7 @@ expected to be a path to an image.  E.g. add the pair "org", "<path to
 org icon>".
 #+end_src
 
-*** Hints
+**** Hints
 
 - Recommendation: change tags with the key sequence =C-c C-c= on the
   headline.  Then =org-pretty-tags= can do the right thing.
@@ -116,8 +116,6 @@ org icon>".
     - Toggle the mode with {M-x org-pretty-tags-mode RET}.
     - Result: See that one character is missing.
 
-** See also
-
 - Org mode offers the customizable =org-tag-faces= which can be used to
   set the face e.g. a color for a certain tag.
 
@@ -136,16 +134,30 @@ Install by adding the respective lines to your init.el:
 (require 'org-pretty-tags)
 #+end_src
 
-** Package Metadata
+** Changelog
 
-*** Version
+*** [2020-01-23 Thu] (org-pretty-tags-agenda-unpretty-habits) New variable
+
+Customize org-pretty-tags-agenda-unpretty-habits to keep an aligned
+habit table in the agenda.  This comes with the cost of unpretty tags
+for those lines.
+
+** Further about this Program
+
+This section gives some additional information about the program and
+might mainly be of interest for people who want to develop the program
+further.
+
+*** Package Metadata
+
+**** Version
 
 #+name: org-pretty-tags-version
 #+begin_src text
-0.2.0
+0.2.2
 #+end_src
 
-*** Typical Metadata
+**** Typical Metadata
 
 Author, contact, dependencies.
 
@@ -160,11 +172,11 @@ Keywords: reading, outlines
 URL: https://gitlab.com/marcowahl/org-pretty-tags
 #+end_src
 
-*** Copyright
+**** Copyright
 
 #+name: copyright
 #+begin_src text :noweb yes
-Copyright 2019 Marco Wahl
+Copyright 2019, 2020 Marco Wahl
 
 <<package-metadata>>
 
@@ -181,12 +193,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #+end_src
-
-** About this Program
-
-This section gives some additional information about the program and
-might mainly be of interest for people who want to develop the program
-further.
 
 *** Literate Program
 
@@ -503,6 +509,18 @@ this subtree.
   :group 'org-pretty-tags)
 #+end_src
 
+***** minor-mode lighter
+
+#+begin_src emacs-lisp
+;;;###autoload
+(defcustom org-pretty-tags-agenda-unpretty-habits
+  nil
+  "If non-nil don't prettify agenda habit lines.  This feature helps
+to keep the alignment of the habit table."
+  :type 'boolean
+  :group 'org-pretty-tags)
+#+end_src
+
 **** variables
 :PROPERTIES:
 :ID:       4087317b-4e36-4fdf-8640-2de44f30a218
@@ -601,7 +619,10 @@ PRETTY-TAGS-SURROGATE-IMAGES is an list of tag names and filenames."
   (goto-char (point-min))
   (while (progn (org-pretty-tags-goto-next-visible-agenda-item)
                 (not (eobp)))
-    (org-pretty-tags-refresh-agenda-line)
+    (unless (and org-pretty-tags-agenda-unpretty-habits
+                 (get-char-property
+                  (save-excursion (beginning-of-line) (point)) 'org-habit-p))
+      (org-pretty-tags-refresh-agenda-line))
     (end-of-line)))
 
 (defun org-pretty-tags-refresh-agenda-line ()
