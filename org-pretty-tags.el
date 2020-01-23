@@ -53,10 +53,10 @@
 ;; 
 ;; If you don't like the predefined surrogates then just delete them.
 ;; 
-;; Use {M-x customize-variable RET org-pretty-tags-surrogate-images RET} to
-;; define surrogate images for tags.  The definition of the image is
-;; expected to be a path to an image.  E.g. add the pair "org", "<path to
-;; org icon>".
+;; Use {M-x customize-variable RET org-pretty-tags-surrogate-images RET}
+;; to define surrogate images for tags.  The definition of the image is
+;; expected to be a path to an image.  E.g. add the pair "org",
+;; "/home/foo/media/images/icons/org-unicorn.png".
 ;;
 ;; Customize description-customize-org-pretty-tags-mode-lighter to define
 ;; the lighter, i.e. the indicator that the mode is active in the mode
