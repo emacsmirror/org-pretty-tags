@@ -102,7 +102,7 @@ line.
 
 #+name: description-customize-org-pretty-tags-agenda-unpretty-habits
 #+begin_src text
-In the org agenda pretty tags can distray the allignment of the habit
+In the org agenda pretty tags can distroy the allignment of the habit
 table.  Customize org-pretty-tags-agenda-unpretty-habits to avoid
 this.
 #+end_src
@@ -244,8 +244,8 @@ literate source file.
 
 *** Create the Emacs Package file
 
-Make sure not to tangle the extra information for automatic detangle.
-See section [[Detangle]].
+- Make sure not to tangle the extra information for automatic
+  detangle.  See section [[Detangle]].
 
 *** Files
 
