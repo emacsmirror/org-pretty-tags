@@ -5,8 +5,7 @@
 :EXPORT_FILE_NAME: doc-org-pretty-tags
 :END:
 
-This is a minor mode to display text or image surrogates for org mode
-tags.
+Display text or image surrogates for Org mode tags.
 
 ** Why
 
