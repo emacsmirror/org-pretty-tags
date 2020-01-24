@@ -109,8 +109,8 @@ this.
 
 *** Hints
 
-- Recommendation: change tags with the key sequence =C-c C-c= on the
-  headline.  Then =org-pretty-tags= can do the right thing.
+- Recommendation: change tags with the key sequence =C-c C-q.  Then
+  =org-pretty-tags= can do the right thing.
 
 - The mode is not able to update the tag surrogates for every scenario.
 
@@ -719,6 +719,10 @@ not get included in the package.
 
 ** Open
 
+*** TODO Try support package all-the-icons
+
+- issue brought up by stardiviner.  see gitlab issue tracker.
+
 ** Closed
 
 *** DONE +Update according to the second reaction on melpa+
@@ -813,7 +817,7 @@ Okay.  I extended the text some.
 
 Thanks.
 
-***** A couple comments on usage which may or may not be important:
+***** About changing tags
 
 - If I'm editing an org buffer and I add a `:music:` tag, it doesn't
   show up as musical notes until I toggle the mode off and
@@ -823,7 +827,7 @@ Thanks.
     the surrogates right for every possible change of the tags.  I
     guess this could be done by hooking into every key-stroke event,
     but I did not check this.  At least when you CHANGE a tag via C-c
-    C-c on a heading the tag surrogates get updated.
+    C-q the tag surrogates get updated.
 
   - See section "Hints" in file readme.org.
 
@@ -831,7 +835,7 @@ Thanks.
   characters off the end of `:imp:`) my edits don't show up until I
   delete the whole tag.  There's probably a way to fix that.
 
-  - What do you think about using C-c C-c?
+  - What do you think about using C-c C-q?
 
 **** DONE +increase version to 0.1.2+
 
