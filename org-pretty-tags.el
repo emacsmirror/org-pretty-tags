@@ -62,7 +62,7 @@
 ;; the lighter, i.e. the indicator that the mode is active in the mode
 ;; line.
 ;;
-;; In the org agenda pretty tags can distray the allignment of the habit
+;; In the org agenda pretty tags can distroy the allignment of the habit
 ;; table.  Customize org-pretty-tags-agenda-unpretty-habits to avoid
 ;; this.
 ;;
