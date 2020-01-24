@@ -263,130 +263,6 @@ literate source file.
 Send feedback, wishes, bug reports, contributions etc. to
 marcowahlsoft@gmail.com.
 
-** Tasks
-
-*** Open
-
-*** Closed
-
-**** DONE +Update according to the second reaction on melpa+
-
-- You shouldn't need the `:files` spec, but you should rename
-  `test-org-pretty-tags.el` to `org-pretty-tags-test.el` so it gets
-  ignored by the MELPA build. (We have a number of pre-defined
-  patterns to ignore.)
-- In general, prefer to `(require 'cl-lib)` rather than `(require
-  'cl-macs)`, because when you write code for older Emacsen which
-  require the standalone `cl-lib` package, that package doesn't
-  contain a `cl-macs` feature, whereas `cl-lib` is available in all
-  cases.
-- Prefer not to have a space in the [middle of your mode
-  lighter](https://gitlab.com/marcowahl/org-pretty-tags/blob/fb589d7bd8abfa7492d11fa162438b51b33ee65d/org-pretty-tags.el#L84):
-  perhaps `" pretty-tags"` or `" PrettyTags"`.
-- I'm wondering why this is a global mode: it doesn't look like it
-  needs to be, and it would be nicer (and would encourage more robust
-  code) if you could split it into a local and global minor mode
-  pair. Making the [hook
-  changes](https://gitlab.com/marcowahl/org-pretty-tags/blob/fb589d7bd8abfa7492d11fa162438b51b33ee65d/org-pretty-tags.el#L191-197)
-  buffer-local would be most of what would be required, as far as I
-  can see.
-
-**** DONE +Update according to the first reaction on melpa+
-
-***** DONE +answer first reaction on melpa+
-
-see https://github.com/melpa/melpa/pull/6016.
-
-****** Checkdoc output:
-
-{ M-x checkdoc RET } gives me
-
-#+begin_src text
-Buffer comments and tags:  Not checked
-Documentation style:       Ok
-Message/Query text style:  Ok
-Unwanted Spaces:           Ok
-#+end_src
-
-Could you please point to the problematic sections?
-
-****** What are these comments all about?  They might confuse future contributors.
-
-#+begin_src emacs-lisp
-;; cache for the images
-;; :PROPERTIES:
-;; :ID:       fb26c0bc-a69e-4cd2-8b5a-800682d24706
-;; :foo:      foo
-;; :END:
-#+end_src
-
-
-The comment-line containing "foo" is trash, thanks for the catch.
-
-The comment-lines starting with ":PROPERTIES:" allow a connection to
-the actual source file.  Note that the org-pretty-tags program is
-actually a literate program.  The actual source is file
-"org-pretty-tags.org" (which is a copy of "readme.org" BTW.)
-
-I tried to make this more clear with the new section "About this
-Program" in the org-pretty-tags.org and better documentation in
-org-pretty-tags.el.
-
-****** Add `(require 'org)`
-
-Thanks.
-
-****** Add `(require 'subr-x)` for `when-let`
-
-Thanks.
-
-****** `assert` comes from `cl.el` which is deprecated - use cl-assert and `(require 'cl-macs)`
-
-Thanks.
-
-****** Why is the group `org-tags` and not `org-pretty-tags`?
-
-I find it appropriate to find the org-pretty-tags config stuff below
-the org-tags config stuff.
-
-****** Could you make the minor-mode lighter " pretty tags" customizable?
-
-Sure.  See org-pretty-tags-mode-lighter.
-
-****** `"programm logic error."` isn't very informative
-
-Okay.  I extended the text some.
-
-****** programm should be program
-
-Thanks.
-
-****** A couple comments on usage which may or may not be important:
-
-- If I'm editing an org buffer and I add a `:music:` tag, it doesn't
-  show up as musical notes until I toggle the mode off and
-  on. Intentional?
-
-  - With the current program structure it's too much CPU waste to get
-    the surrogates right for every possible change of the tags.  I
-    guess this could be done by hooking into every key-stroke event,
-    but I did not check this.  At least when you CHANGE a tag via C-c
-    C-c on a heading the tag surrogates get updated.
-
-  - See section "Hints" in file readme.org.
-
-- If I'm editing a tag that has been prettified (e.g. delete
-  characters off the end of `:imp:`) my edits don't show up until I
-  delete the whole tag.  There's probably a way to fix that.
-
-  - What do you think about using C-c C-c?
-
-***** DONE +increase version to 0.1.2+
-
-**** DONE +Make sure only tags get the surrogate+
-
-- +A match before the tag area gets replaced by the surrogate.+
-
 * Code
 
 ** Package
@@ -838,3 +714,127 @@ not get included in the package.
 
 ;;; org-pretty-tags-test.el ends here
 #+end_src
+
+* Tasks
+
+** Open
+
+** Closed
+
+*** DONE +Update according to the second reaction on melpa+
+
+- You shouldn't need the `:files` spec, but you should rename
+  `test-org-pretty-tags.el` to `org-pretty-tags-test.el` so it gets
+  ignored by the MELPA build. (We have a number of pre-defined
+  patterns to ignore.)
+- In general, prefer to `(require 'cl-lib)` rather than `(require
+  'cl-macs)`, because when you write code for older Emacsen which
+  require the standalone `cl-lib` package, that package doesn't
+  contain a `cl-macs` feature, whereas `cl-lib` is available in all
+  cases.
+- Prefer not to have a space in the [middle of your mode
+  lighter](https://gitlab.com/marcowahl/org-pretty-tags/blob/fb589d7bd8abfa7492d11fa162438b51b33ee65d/org-pretty-tags.el#L84):
+  perhaps `" pretty-tags"` or `" PrettyTags"`.
+- I'm wondering why this is a global mode: it doesn't look like it
+  needs to be, and it would be nicer (and would encourage more robust
+  code) if you could split it into a local and global minor mode
+  pair. Making the [hook
+  changes](https://gitlab.com/marcowahl/org-pretty-tags/blob/fb589d7bd8abfa7492d11fa162438b51b33ee65d/org-pretty-tags.el#L191-197)
+  buffer-local would be most of what would be required, as far as I
+  can see.
+
+*** DONE +Update according to the first reaction on melpa+
+
+**** DONE +answer first reaction on melpa+
+
+see https://github.com/melpa/melpa/pull/6016.
+
+***** Checkdoc output:
+
+{ M-x checkdoc RET } gives me
+
+#+begin_src text
+Buffer comments and tags:  Not checked
+Documentation style:       Ok
+Message/Query text style:  Ok
+Unwanted Spaces:           Ok
+#+end_src
+
+Could you please point to the problematic sections?
+
+***** What are these comments all about?  They might confuse future contributors.
+
+#+begin_src emacs-lisp
+;; cache for the images
+;; :PROPERTIES:
+;; :ID:       fb26c0bc-a69e-4cd2-8b5a-800682d24706
+;; :foo:      foo
+;; :END:
+#+end_src
+
+
+The comment-line containing "foo" is trash, thanks for the catch.
+
+The comment-lines starting with ":PROPERTIES:" allow a connection to
+the actual source file.  Note that the org-pretty-tags program is
+actually a literate program.  The actual source is file
+"org-pretty-tags.org" (which is a copy of "readme.org" BTW.)
+
+I tried to make this more clear with the new section "About this
+Program" in the org-pretty-tags.org and better documentation in
+org-pretty-tags.el.
+
+***** Add `(require 'org)`
+
+Thanks.
+
+***** Add `(require 'subr-x)` for `when-let`
+
+Thanks.
+
+***** `assert` comes from `cl.el` which is deprecated - use cl-assert and `(require 'cl-macs)`
+
+Thanks.
+
+***** Why is the group `org-tags` and not `org-pretty-tags`?
+
+I find it appropriate to find the org-pretty-tags config stuff below
+the org-tags config stuff.
+
+***** Could you make the minor-mode lighter " pretty tags" customizable?
+
+Sure.  See org-pretty-tags-mode-lighter.
+
+***** `"programm logic error."` isn't very informative
+
+Okay.  I extended the text some.
+
+***** programm should be program
+
+Thanks.
+
+***** A couple comments on usage which may or may not be important:
+
+- If I'm editing an org buffer and I add a `:music:` tag, it doesn't
+  show up as musical notes until I toggle the mode off and
+  on. Intentional?
+
+  - With the current program structure it's too much CPU waste to get
+    the surrogates right for every possible change of the tags.  I
+    guess this could be done by hooking into every key-stroke event,
+    but I did not check this.  At least when you CHANGE a tag via C-c
+    C-c on a heading the tag surrogates get updated.
+
+  - See section "Hints" in file readme.org.
+
+- If I'm editing a tag that has been prettified (e.g. delete
+  characters off the end of `:imp:`) my edits don't show up until I
+  delete the whole tag.  There's probably a way to fix that.
+
+  - What do you think about using C-c C-c?
+
+**** DONE +increase version to 0.1.2+
+
+*** DONE +Make sure only tags get the surrogate+
+
+- +A match before the tag area gets replaced by the surrogate.+
