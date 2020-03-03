@@ -5,12 +5,20 @@
 :EXPORT_FILE_NAME: doc-org-pretty-tags
 :END:
 
+#+name: description-about
+#+begin_src org
 Display text or image surrogates for Org mode tags.
+
+See images at https://gitlab.com/marcowahl/org-pretty-tags.
+#+end_src
 
 ** Why
 
+#+name: description-why
+#+begin_src org
 In Org mode only a small set of characters is allowed in tags.  A
 wider range of symbols might increase readability and joy.
+#+end_src
 
 ** What
 
@@ -287,6 +295,10 @@ marcowahlsoft@gmail.com.
 
 ;;; Commentary:
 
+;; <<description-about>>
+;;
+;; <<description-why>>
+;;
 ;; <<description-activate-surrogates-buffer>>
 ;;
 ;; <<description-activate-surrogates-all-buffers>>
