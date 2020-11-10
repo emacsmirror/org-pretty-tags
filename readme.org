@@ -9,16 +9,7 @@
 #+begin_src org
 Display text or image surrogates for Org mode tags.
 
-See https://gitlab.com/marcowahl/org-pretty-tags section Example
-for an example of prettified Org mode tags.
-#+end_src
-
-** Why
-
-#+name: description-why
-#+begin_src org
-In Org mode only a small set of characters is allowed in tags.  A
-wider range of symbols might increase readability and joy.
+See section Example for an example of prettified Org mode tags.
 #+end_src
 
 ** What
@@ -144,6 +135,14 @@ this.
 
 - Org mode offers the customizable =org-tag-faces= which can be used to
   set the face e.g. a color for a certain tag.
+
+** Why
+
+#+name: description-why
+#+begin_src org
+In Org mode only a small set of characters is allowed in tags.  A
+wider range of symbols might increase readability and joy.
+#+end_src
 
 ** Install
 
