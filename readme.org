@@ -9,7 +9,8 @@
 #+begin_src org
 Display text or image surrogates for Org mode tags.
 
-See https://gitlab.com/marcowahl/org-pretty-tags section Example for an example of how Org mode tags can be prettified.
+See https://gitlab.com/marcowahl/org-pretty-tags section Example
+for an example of how Org mode tags can be prettified.
 #+end_src
 
 ** Why
