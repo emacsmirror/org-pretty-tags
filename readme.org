@@ -417,6 +417,9 @@ this subtree.
 #+end_src
 
 ***** minor-mode lighter
+:PROPERTIES:
+:ID:       0af6856e-ec71-43c5-9b17-853b057621bc
+:END:
 
 #+begin_src emacs-lisp
 ;;;###autoload
