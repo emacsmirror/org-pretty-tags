@@ -8,9 +8,20 @@
 #+name: description-about
 #+begin_src org
 Display text or image surrogates for Org mode tags.
-
-See section Example for an example of prettified Org mode tags.
 #+end_src
+
+** Example :ATTACH:
+:PROPERTIES:
+:ID:       a0a7f0d8-cdc8-414b-a715-e48205d07deb
+:END:
+
+*** Ordinary tag display
+
+[[./data/a0/a7f0d8-cdc8-414b-a715-e48205d07deb/emacsshot.win-20190106143046.png]]
+
+*** Pretty tag display
+
+[[./data/a0/a7f0d8-cdc8-414b-a715-e48205d07deb/emacsshot.win-20190106143055.png]]
 
 ** What
 
@@ -26,19 +37,6 @@ Notes:
 - The decoration of the tags for an agenda item follows the setting in
   the respective org file.  Keys =g= and =r= refresh the agenda and
   updates the display of the pretty tags.
-
-*** Example :ATTACH:
-:PROPERTIES:
-:ID:       a0a7f0d8-cdc8-414b-a715-e48205d07deb
-:END:
-
-**** Ordinary tag display
-
-[[./data/a0/a7f0d8-cdc8-414b-a715-e48205d07deb/emacsshot.win-20190106143046.png]]
-
-**** Pretty tag display
-
-[[./data/a0/a7f0d8-cdc8-414b-a715-e48205d07deb/emacsshot.win-20190106143055.png]]
 
 *** Documentation
 
