@@ -96,16 +96,18 @@
     ("money" . "$$$")
     ("easy" . "₰")
     ("music" . "♬"))
-  "List of pairs of tag and replacement e.g. (\"money\" . \"$$$\") of
-  surrogates for tags."
+  "List of pairs consisting of a tag and a replacement.
+E.g. (\"money\" . \"$$$\") where \"$$$\" is the surrogate for tag
+\"money\"."
   :type '(alist :key-type string :value-type string)
   :group 'org-pretty-tags)
 
 ;;;###autoload
 (defcustom org-pretty-tags-surrogate-images
   '()
-  "List of pairs of tag and file-path to an image e.g. (\"@alice\" . \"/images/alice.png\") of
-  image surrogates for tags."
+  "List of pairs consisting of tag and file-path to an image.
+E.g. (\"@alice\" . \"/images/alice.png\") where image
+\"/images/alice.png\" is the surrogate for tag \"@alice\"."
   :type '(alist :key-type string :value-type string)
   :group 'org-pretty-tags)
 
